@@ -1,7 +1,4 @@
-import { config, hmac, decode } from './deps.ts';
-
-// TODO: this will not be here
-const { APIKEY, PASSPHRASE, SECRET } = config({ safe: true });
+import { hmac, decode } from './deps.ts';
 
 export interface CBAccessSignParams {
   apiKey: string;
@@ -16,7 +13,7 @@ export type ContentType = 'application/json';
 
 export type CBAccessHeadersResp = {
   Accept: ContentType;
-  'Content-Type': ContentType,
+  'Content-Type': ContentType;
   'cb-access-key': string; // the API key
   'cb-access-passphrase': string; // phasephrase when API registered
   'cb-access-sign': string; // hmac sign
@@ -60,22 +57,3 @@ export function cbAccessFetchOptions({
     options,
   };
 }
-
-const { options } = cbAccessFetchOptions({
-  apiKey: APIKEY,
-  passPhrase: PASSPHRASE,
-  secret: SECRET,
-  method: 'GET',
-  requestPath: '/accounts',
-  body: '',
-});
-
-console.log(options);
-
-// TODO: this will not be here
-const jsonResponse = await fetch(
-  'https://api.exchange.coinbase.com/accounts',
-  options,
-);
-const jsonData = await jsonResponse.json();
-console.log(jsonData);
