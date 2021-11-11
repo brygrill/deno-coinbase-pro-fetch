@@ -12,50 +12,63 @@ export interface CBAccessSignParams {
   body: string;
 }
 
-export type CBAccessHeaders = {
-  Accept: 'application/json';
+export type ContentType = 'application/json';
+
+export type CBAccessHeadersResp = {
+  Accept: ContentType;
+  'Content-Type': ContentType,
   'cb-access-key': string; // the API key
   'cb-access-passphrase': string; // phasephrase when API registered
   'cb-access-sign': string; // hmac sign
-  'cb-access-timestamp': string; // timestamp
+  'cb-access-timestamp': number; // timestamp
 };
 
-export function cbAccessSign({
+export type CbAccessFetchOptionsResp = {
+  headers: CBAccessHeadersResp;
+  options: RequestInit;
+};
+
+export function cbAccessFetchOptions({
   apiKey,
   passPhrase,
   secret,
   method,
   requestPath,
   body,
-}: CBAccessSignParams): CBAccessHeaders {
+}: CBAccessSignParams): CbAccessFetchOptionsResp {
   const timeStamp = Date.now() / 1000;
   const key = decode(secret);
   const msg = `${timeStamp}${method}${requestPath}${body}`;
   const sign = hmac('sha256', key, msg, 'utf8', 'base64') as string;
 
-  return {
-    Accept: 'application/json',
+  const headers = {
+    Accept: 'application/json' as ContentType,
+    'Content-Type': 'application/json' as ContentType,
     'cb-access-key': apiKey,
     'cb-access-passphrase': passPhrase,
     'cb-access-sign': sign,
-    'cb-access-timestamp': timeStamp as unknown as string, // TODO: fix this
+    'cb-access-timestamp': timeStamp,
+  };
+
+  const options = {
+    method,
+    headers,
+  } as unknown as RequestInit;
+
+  return {
+    headers,
+    options,
   };
 }
 
-const headers = cbAccessSign({
+const { options } = cbAccessFetchOptions({
   apiKey: APIKEY,
   passPhrase: PASSPHRASE,
   secret: SECRET,
   method: 'GET',
   requestPath: '/accounts',
-  body: JSON.stringify({}),
+  body: '',
 });
-
-// console.log(headers);
-const options = {
-  method: 'GET',
-  headers,
-};
 
 console.log(options);
 
