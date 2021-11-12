@@ -25,6 +25,7 @@ export type CbAccessFetchOptionsResp = {
   options: RequestInit;
 };
 
+/** Create `fetch` request `options` for [Coinbase Pro auth](https://docs.cloud.coinbase.com/exchange/docs/authorization-and-authentication). */
 export function cbAccessFetchOptions({
   apiKey,
   passPhrase,
