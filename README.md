@@ -43,7 +43,9 @@ const { options, headers } = cbAccessFetchOptions({
 });
 ```
 
-`headers` will be the required headers described [https://docs.cloud.coinbase.com/exchange/docs/authorization-and-authentication#creating-a-request](here).
+The function returns `headers` and `options`.
+
+`headers` will be the required headers described [here](https://docs.cloud.coinbase.com/exchange/docs/authorization-and-authentication#creating-a-request).
 ```typescript
 console.log(headers)
 
@@ -70,5 +72,7 @@ console.log(options)
 // TODO
 ```
 
+## Options
+TODO
 
 
