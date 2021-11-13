@@ -51,6 +51,7 @@ export function cbAccessFetchOptions({
   const options = {
     method,
     headers,
+    ...(method === 'POST' && { body }),
   } as unknown as RequestInit;
 
   return {
