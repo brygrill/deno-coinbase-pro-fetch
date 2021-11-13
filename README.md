@@ -15,37 +15,46 @@ You will need:
 - Passphrase
 
 Import the function
+
 ```typescript
-export { cbAccessFetchOptions } from 'https://raw.githubusercontent.com/brygrill/deno-cb-pro-auth-headers/main/mod.ts'
+export { cbAccessFetchOptions } from "https://raw.githubusercontent.com/brygrill/deno-cb-pro-auth-headers/main/mod.ts";
 ```
 
 Pass in the args for a `GET` request:
+
 ```typescript
 const { options, headers } = cbAccessFetchOptions({
   apiKey: APIKEY,
   passPhrase: PASSPHRASE,
   secret: SECRET,
-  method: 'GET',
-  requestPath: '/accounts',
-  body: '',
+  method: "GET",
+  requestPath: "/accounts",
+  body: "",
 });
 ```
 
 or a `POST`:
+
 ```typescript
 const { options, headers } = cbAccessFetchOptions({
   apiKey: APIKEY,
   passPhrase: PASSPHRASE,
   secret: SECRET,
-  method: 'POST',
-  requestPath: '/deposits/coinbase-account',
-  body: JSON.stringify({amount: '10', coinbase_account_id: '123', currency: 'usd'}),
+  method: "POST",
+  requestPath: "/deposits/coinbase-account",
+  body: JSON.stringify({
+    amount: "10",
+    coinbase_account_id: "123",
+    currency: "usd",
+  }),
 });
 ```
 
 The function returns `headers` and `options`.
 
-`headers` will be the required headers described [here](https://docs.cloud.coinbase.com/exchange/docs/authorization-and-authentication#creating-a-request).
+`headers` will be the required headers described
+[here](https://docs.cloud.coinbase.com/exchange/docs/authorization-and-authentication#creating-a-request).
+
 ```typescript
 console.log(headers)
 
@@ -60,6 +69,7 @@ console.log(headers)
 ```
 
 `options` will be `RequestInit` object for a `fetch` request
+
 ```typescript
 console.log(options)
 // GET request
@@ -73,6 +83,5 @@ console.log(options)
 ```
 
 ## Options
+
 TODO
-
-
