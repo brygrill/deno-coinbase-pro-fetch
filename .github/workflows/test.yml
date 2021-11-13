@@ -1,0 +1,23 @@
+name: Run CI
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+        uses: actions/checkout@v2
+
+        uses: denolib/setup-deno@v2
+        with:
+          deno-version: v1.x
+
+      - name: Lint Deno Module
+        run: deno fmt --check
+
+      - name: Build Deno Module
+        run: deno run --reload mod.ts
+        
+      - name: Test Deno Module
+        run: deno test --allow-none
