@@ -59,3 +59,6 @@ export function cbAccessFetchOptions({
     options,
   };
 }
+
+// TOOO: init class with api secrets
+// add fetch function that returns data
