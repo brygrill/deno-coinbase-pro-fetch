@@ -1,8 +1,8 @@
 import { assertEquals } from "https://deno.land/std@0.114.0/testing/asserts.ts";
-import { cbAccessFetchOptions } from "./mod.ts";
+import { fetchOptions } from "./fetch_options.ts";
 
-Deno.test("cbAccessFetchOptions", function () {
-  const testGet = cbAccessFetchOptions({
+Deno.test("fetchOptions", function () {
+  const testGet = fetchOptions({
     apiKey: "APIKEY",
     passPhrase: "PASSPHRASE",
     secret: "SECRET",
@@ -14,7 +14,7 @@ Deno.test("cbAccessFetchOptions", function () {
   assertEquals(testGet.options.method, "GET");
   assertEquals(testGet.options.body, undefined);
 
-  const testPost = cbAccessFetchOptions({
+  const testPost = fetchOptions({
     apiKey: "APIKEY",
     passPhrase: "PASSPHRASE",
     secret: "SECRET",
