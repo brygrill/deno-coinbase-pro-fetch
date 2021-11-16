@@ -26,3 +26,7 @@ export type FetchOptionsResp = {
   headers: CBAccessHeadersResp;
   options: RequestInit;
 };
+
+export interface CBFetchOptions {
+  sandbox?: boolean;
+}
