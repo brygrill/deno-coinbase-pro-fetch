@@ -5,10 +5,12 @@ import type { CBAccessSetup, CBFetchOptions, RequestParams } from "./types.ts";
 const defaultOptions: CBFetchOptions = {
   sandbox: false,
 };
+
 /** Make requests to the Coinbase Pro API. Setup with [APIKey, Passphrase, and Secret](https://docs.cloud.coinbase.com/exchange/docs/authorization-and-authentication). */
 export class CBFetch {
   protected readonly setup: CBAccessSetup;
   protected readonly options: CBFetchOptions;
+  /** The base URL used for API requests */
   readonly url: string;
 
   constructor(setup: CBAccessSetup, options = defaultOptions) {
