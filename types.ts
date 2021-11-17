@@ -30,3 +30,8 @@ export type FetchOptionsResp = {
 export interface CBFetchOptions {
   sandbox?: boolean;
 }
+
+export interface FetchParams {
+  url: string;
+  options: RequestInit;
+}

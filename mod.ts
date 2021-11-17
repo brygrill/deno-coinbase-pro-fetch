@@ -1,4 +1,5 @@
 import { fetchOptions } from "./fetch_options.ts";
+import { fetchData } from "./fetch.ts";
 import Constants from "./constants.ts";
 import type { CBAccessSetup, CBFetchOptions, RequestParams } from "./types.ts";
 
@@ -22,5 +23,14 @@ export class CBFetch {
   /** Returns `fetch` request `options` and CB API request Headers */
   fetchOptions(requestOptions: RequestParams) {
     return fetchOptions({ ...this.setup, ...requestOptions });
+  }
+
+  /** Make an async call to the CB API */
+  fetch<T>(requestOptions: RequestParams) {
+    const { options } = this.fetchOptions(requestOptions);
+    return fetchData<T>({
+      url: `${this.url}${requestOptions.requestPath}`,
+      options,
+    });
   }
 }
