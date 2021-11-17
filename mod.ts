@@ -3,6 +3,8 @@ import { fetchData } from "./fetch.ts";
 import Constants from "./constants.ts";
 import type { CBAccessSetup, CBFetchOptions, RequestParams } from "./types.ts";
 
+export { FetchError } from "./fetch.ts";
+
 const defaultOptions: CBFetchOptions = {
   sandbox: false,
 };
@@ -25,7 +27,7 @@ export class CBFetch {
     return fetchOptions({ ...this.setup, ...requestOptions });
   }
 
-  /** Make an async call to the CB API */
+  /** Make an async call to the CB API. Non 200s are caught and returned via FetchError class */
   fetch<T>(requestOptions: RequestParams) {
     const { options } = this.fetchOptions(requestOptions);
     return fetchData<T>({

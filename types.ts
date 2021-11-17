@@ -35,3 +35,15 @@ export interface FetchParams {
   url: string;
   options: RequestInit;
 }
+
+export interface FetchResp<T> {
+  data: T;
+  status: number;
+  type: ResponseType;
+}
+
+export interface InitFetchError {
+  status: number;
+  message: string;
+  url: string;
+}
