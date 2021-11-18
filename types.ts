@@ -47,3 +47,12 @@ export interface InitFetchError {
   message: string;
   url: string;
 }
+
+/** Supported Endpoints */
+export type EndpointName = "accounts" | "orders" | "reports";
+
+/** API Contract Conditional Type  */
+export type APIContractModel<T> = T extends "accounts" ? string
+  : T extends "orders" ? number
+  : T extends "reports" ? number[]
+  : null;

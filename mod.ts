@@ -1,7 +1,13 @@
 import { fetchOptions } from "./fetch_options.ts";
 import { fetchData } from "./fetch.ts";
 import Constants from "./constants.ts";
-import type { CBAccessSetup, CBFetchOptions, RequestParams } from "./types.ts";
+import type {
+  APIContractModel,
+  CBAccessSetup,
+  CBFetchOptions,
+  EndpointName,
+  RequestParams,
+} from "./types.ts";
 
 export { FetchError } from "./fetch.ts";
 
@@ -34,5 +40,19 @@ export class CBFetch {
       url: `${this.url}${requestOptions.requestPath}`,
       options,
     });
+  }
+
+  /** Make a request to preconfigured endpoints. Non 200s are caught and returned via FetchError class */
+  endpts<T extends EndpointName>(endpoint: T): APIContractModel<T> {
+    switch (endpoint) {
+      case "accounts":
+        return "hello" as APIContractModel<T>;
+      case "orders":
+        return 123 as APIContractModel<T>;
+      case "reports":
+        return [1, 2, 3] as APIContractModel<T>;
+      default:
+        return null as APIContractModel<T>;
+    }
   }
 }
