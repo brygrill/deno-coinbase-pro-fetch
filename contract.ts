@@ -10,7 +10,7 @@ export interface Account {
   "trading_enabled": boolean;
 }
 
-export interface AccountExtended extends Account{
+export interface AccountExtended extends Account {
   balanceNum: number;
   availableNum: number;
   holdNum: number;
