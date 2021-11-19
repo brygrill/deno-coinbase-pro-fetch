@@ -1,5 +1,6 @@
 import { fetchOptions } from "./fetch_options.ts";
 import { fetchData } from "./fetch.ts";
+import { fetchAccounts } from "./endpoints.ts";
 import Constants from "./constants.ts";
 import type {
   APIContractModel,
@@ -46,7 +47,10 @@ export class CBFetch {
   endpts<T extends EndpointName>(endpoint: T): APIContractModel<T> {
     switch (endpoint) {
       case "accounts":
-        return "hello" as APIContractModel<T>;
+        return fetchAccounts({
+          ...this.setup,
+          url: this.url,
+        }) as APIContractModel<T>;
       case "orders":
         return 123 as APIContractModel<T>;
       case "reports":

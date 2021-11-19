@@ -1,10 +1,13 @@
+import { Account } from "./contract.ts";
 export interface CBAccessSetup {
   apiKey: string;
   passPhrase: string;
   secret: string;
 }
+
+export type MethodType = "GET" | "POST";
 export interface RequestParams {
-  method: "GET" | "POST";
+  method: MethodType;
   requestPath: string;
   body: string;
 }
@@ -52,7 +55,11 @@ export interface InitFetchError {
 export type EndpointName = "accounts" | "orders" | "reports";
 
 /** API Contract Conditional Type  */
-export type APIContractModel<T> = T extends "accounts" ? string
+export type APIContractModel<T> = T extends "accounts" ? Promise<Account[]>
   : T extends "orders" ? number
   : T extends "reports" ? number[]
   : null;
+
+export interface CBAEndpointsSetup extends CBAccessSetup {
+  url: string;
+}
