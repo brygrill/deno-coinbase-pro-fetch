@@ -1,7 +1,7 @@
 import { fetchOptions } from "./fetch_options.ts";
 import { fetchData } from "./fetch.ts";
 import { fetchAccounts } from "./endpoints.ts";
-import Constants from "./constants.ts";
+import { Constants } from "./constants.ts";
 import type {
   APIContractModel,
   CBAccessSetup,
