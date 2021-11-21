@@ -1,16 +1,23 @@
 import { fetchOptions } from "./fetch_options.ts";
 import { fetchData } from "./fetch.ts";
 import { EndpointConstants } from "./constants.ts";
-import type { CBAEndpointsSetup, MethodType } from "./types.ts";
+import type {
+  CBAEndpointsSetup,
+  EndpointParamOptions,
+  MethodType,
+} from "./types.ts";
 import type { Account } from "./contract.ts";
+
+interface BuildFetchRequestOptions {
+  endpoint: string;
+  method?: MethodType;
+  body?: string;
+}
 
 function buildFetchRequest(
   setup: CBAEndpointsSetup,
-  endpoint: string,
-  method: MethodType = "GET",
-  body = "",
+  { endpoint, method = "GET", body = "" }: BuildFetchRequestOptions,
 ) {
-  console.warn(endpoint)
   const { url: baseUrl, ...rest } = setup;
   const url = `${baseUrl}${endpoint}`;
   const requestOptions = {
@@ -22,16 +29,21 @@ function buildFetchRequest(
   return { url, requestOptions };
 }
 
-export async function fetchAccounts<T>(
+/** Make request to the `/accounts` [endpoint](https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getaccounts).
+ *
+ * @param `id`: will send request to `/accounts/{account_id}`
+ */
+export async function fetchAccounts(
   setup: CBAEndpointsSetup,
-): Promise<Account[]> {
-  console.log(EndpointConstants)
-  const { url, requestOptions } = buildFetchRequest(
-    setup,
-    EndpointConstants.Accounts,
-  );
+  params?: EndpointParamOptions,
+): Promise<Account | Account[]> {
+  const { url, requestOptions } = buildFetchRequest(setup, {
+    endpoint: params?.id
+      ? `${EndpointConstants.AccountId(params?.id)}`
+      : EndpointConstants.Accounts,
+  });
   const { options } = fetchOptions(requestOptions);
-  const { data } = await fetchData<Account[]>({
+  const { data } = await fetchData<Account | Account[]>({
     url,
     options,
   });

@@ -7,6 +7,7 @@ import type {
   CBAccessSetup,
   CBFetchOptions,
   EndpointName,
+  EndpointParamOptions,
   RequestParams,
 } from "./types.ts";
 
@@ -43,14 +44,34 @@ export class CBFetch {
     });
   }
 
-  /** Make a request to preconfigured endpoints. Non 200s are caught and returned via FetchError class */
-  endpts<T extends EndpointName>(endpoint: T): APIContractModel<T> {
+  /** Make a request to preconfigured endpoints. Non 200s are caught and returned via FetchError class
+   * For endpoints with a param like `accounts:id`, id param must be included
+   */
+  endpts<T extends EndpointName>(
+    endpoint: T,
+    paramOptions?: EndpointParamOptions,
+  ): APIContractModel<T> {
     switch (endpoint) {
+      // /accounts
       case "accounts":
         return fetchAccounts({
           ...this.setup,
           url: this.url,
         }) as APIContractModel<T>;
+
+      // accounts/:id
+      case "accounts/:id":
+        // check for param
+        if (!paramOptions?.id) {
+          throw new TypeError("paramOptions.id must be provided!");
+        }
+        return fetchAccounts(
+          {
+            ...this.setup,
+            url: this.url,
+          },
+          paramOptions,
+        ) as APIContractModel<T>;
       case "orders":
         return 123 as APIContractModel<T>;
       case "reports":

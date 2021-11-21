@@ -52,15 +52,16 @@ export interface InitFetchError {
 }
 
 /** Supported Endpoints */
-export type EndpointName = "accounts" | "orders" | "reports";
+export type EndpointName = "accounts" | 'accounts/:id' | "orders" | "reports";
 
-export interface EndpointOptions {
+export interface EndpointParamOptions {
   id?: string;
   body?: Record<string, unknown>;
 }
 
 /** API Contract Conditional Type  */
 export type APIContractModel<T> = T extends "accounts" ? Promise<Account[]>
+  : T extends "accounts/:id" ? Promise<Account>
   : T extends "orders" ? number
   : T extends "reports" ? number[]
   : null;
