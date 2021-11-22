@@ -1,15 +1,8 @@
 import { fetchOptions } from "./fetch_options.ts";
 import { fetchData } from "./fetch.ts";
-import { fetchAccounts } from "./endpoints.ts";
+import { Endpoints } from "./endpoints.ts";
 import { Constants } from "./constants.ts";
-import type {
-  APIContractModel,
-  CBAccessSetup,
-  CBFetchOptions,
-  EndpointName,
-  EndpointParamOptions,
-  RequestParams,
-} from "./types.ts";
+import type { CBAccessSetup, CBFetchOptions, RequestParams } from "./types.ts";
 
 export { FetchError } from "./fetch.ts";
 
@@ -23,11 +16,15 @@ export class CBFetch {
   protected readonly options: CBFetchOptions;
   /** The base URL used for API requests */
   readonly url: string;
+  /** Requests to pre-configured endpoints. */
+  readonly endpoints: Endpoints;
 
   constructor(setup: CBAccessSetup, options = defaultOptions) {
+    const baseURL = options.sandbox ? Constants.SandboxUrl : Constants.BaseUrl;
     this.setup = setup;
     this.options = options;
-    this.url = options.sandbox ? Constants.SandboxUrl : Constants.BaseUrl;
+    this.url = baseURL;
+    this.endpoints = new Endpoints({ ...setup, url: baseURL });
   }
 
   /** Returns `fetch` request `options` and CB API request Headers */
@@ -42,42 +39,5 @@ export class CBFetch {
       url: `${this.url}${requestOptions.requestPath}`,
       options,
     });
-  }
-
-  /** Make a request to preconfigured endpoints. Non 200s are caught and returned via FetchError class
-   * For endpoints with a param like `accounts:id`, id param must be included
-   */
-  endpts<T extends EndpointName>(
-    endpoint: T,
-    paramOptions?: EndpointParamOptions,
-  ): APIContractModel<T> {
-    switch (endpoint) {
-      // /accounts
-      case "accounts":
-        return fetchAccounts({
-          ...this.setup,
-          url: this.url,
-        }) as APIContractModel<T>;
-
-      // accounts/:id
-      case "accounts/:id":
-        // check for param
-        if (!paramOptions?.id) {
-          throw new TypeError("paramOptions.id must be provided!");
-        }
-        return fetchAccounts(
-          {
-            ...this.setup,
-            url: this.url,
-          },
-          paramOptions,
-        ) as APIContractModel<T>;
-      case "orders":
-        return 123 as APIContractModel<T>;
-      case "reports":
-        return [1, 2, 3] as APIContractModel<T>;
-      default:
-        return null as APIContractModel<T>;
-    }
   }
 }

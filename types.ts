@@ -51,21 +51,6 @@ export interface InitFetchError {
   url: string;
 }
 
-/** Supported Endpoints */
-export type EndpointName = "accounts" | 'accounts/:id' | "orders" | "reports";
-
-export interface EndpointParamOptions {
-  id?: string;
-  body?: Record<string, unknown>;
-}
-
-/** API Contract Conditional Type  */
-export type APIContractModel<T> = T extends "accounts" ? Promise<Account[]>
-  : T extends "accounts/:id" ? Promise<Account>
-  : T extends "orders" ? number
-  : T extends "reports" ? number[]
-  : null;
-
 export interface CBAEndpointsSetup extends CBAccessSetup {
   url: string;
 }
