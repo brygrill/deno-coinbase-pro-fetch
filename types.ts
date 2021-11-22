@@ -1,4 +1,3 @@
-import { Account } from "./contract.ts";
 export interface CBAccessSetup {
   apiKey: string;
   passPhrase: string;
