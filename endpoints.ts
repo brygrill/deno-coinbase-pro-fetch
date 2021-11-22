@@ -1,8 +1,9 @@
 import { fetchOptions } from "./fetch_options.ts";
 import { fetchData } from "./fetch.ts";
+import { extendAccount } from "./utils.ts";
 import { EndpointConstants } from "./constants.ts";
 import type { CBAEndpointsSetup, MethodType } from "./types.ts";
-import type { Account } from "./contract.ts";
+import type { Account, AccountExtended } from "./contract.ts";
 
 interface BuildFetchRequestOptions {
   endpoint: string;
@@ -33,7 +34,7 @@ export class Endpoints {
   }
 
   /** Make request to the `/accounts` [endpoint](https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getaccounts).*/
-  async accounts(): Promise<Account[]> {
+  async accounts(): Promise<AccountExtended[]> {
     const { url, requestOptions } = buildFetchRequest(this.setup, {
       endpoint: EndpointConstants.Accounts,
     });
@@ -43,11 +44,11 @@ export class Endpoints {
       options,
     });
 
-    return data;
+    return data.map((i) => extendAccount(i));
   }
 
   /** Make request to the `/accounts/:id` [endpoint](https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getaccount).*/
-  async accountsId(id: string): Promise<Account> {
+  async accountsId(id: string): Promise<AccountExtended> {
     const { url, requestOptions } = buildFetchRequest(this.setup, {
       endpoint: `${EndpointConstants.AccountId(id)}`,
     });
@@ -57,6 +58,6 @@ export class Endpoints {
       options,
     });
 
-    return data;
+    return extendAccount(data);
   }
 }
