@@ -5,6 +5,16 @@ import type {
   FetchOptionsResp,
 } from "./types.ts";
 
+export const baseHeaders = {
+  Accept: "application/json" as ContentType,
+  "Content-Type": "application/json" as ContentType,
+};
+
+export const noAuthOptions: RequestInit = {
+  headers: baseHeaders,
+  method: "GET",
+};
+
 /** Create `fetch` request `options` */
 export function fetchOptions({
   apiKey,
@@ -20,8 +30,7 @@ export function fetchOptions({
   const sign = hmac("sha256", key, msg, "utf8", "base64") as string;
 
   const headers = {
-    Accept: "application/json" as ContentType,
-    "Content-Type": "application/json" as ContentType,
+    ...baseHeaders,
     "cb-access-key": apiKey,
     "cb-access-passphrase": passPhrase,
     "cb-access-sign": sign,
