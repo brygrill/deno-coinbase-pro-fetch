@@ -1,4 +1,4 @@
-import { fetchOptions } from "./fetch_options.ts";
+import { fetchOptions, noAuthOptions } from "./fetch_options.ts";
 import { fetchData } from "./fetch.ts";
 import { extendAccount } from "./utils.ts";
 import { EndpointConstants } from "./constants.ts";
@@ -11,12 +11,17 @@ interface BuildFetchRequestOptions {
   body?: string;
 }
 
+function buildUrl(baseUrl: string, endpoint: string) {
+  return `${baseUrl}${endpoint}`;
+}
+
 function buildFetchRequest(
   setup: CBAEndpointsSetup,
   { endpoint, method = "GET", body = "" }: BuildFetchRequestOptions,
 ) {
   const { url: baseUrl, ...rest } = setup;
-  const url = `${baseUrl}${endpoint}`;
+  const url = buildUrl(baseUrl, endpoint);
+
   const requestOptions = {
     ...rest,
     method,
@@ -59,5 +64,16 @@ export class Endpoints {
     });
 
     return extendAccount(data);
+  }
+
+  /** Make request to the `/currencies` [endpoint](https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getcurrencies).*/
+  async currencies(): Promise<string[]> {
+    const url = buildUrl(this.setup.url, EndpointConstants.Currencies);
+    const { data } = await fetchData<string[]>({
+      url,
+      options: noAuthOptions,
+    });
+
+    return data;
   }
 }
