@@ -1,10 +1,14 @@
-import { fetchOptions } from "./fetch_options.ts";
-import { fetchData } from "./fetch.ts";
-import { Endpoints } from "./endpoints.ts";
+import { fetchOptions } from "./fetch/fetch_options.ts";
+import { fetchData } from "./fetch/fetch.ts";
+import { Endpoints } from "./fetch/endpoints.ts";
 import { Constants } from "./constants.ts";
-import type { CBAccessSetup, CBFetchOptions, RequestParams } from "./types.ts";
+import type {
+  CBAccessSetup,
+  CBFetchOptions,
+  RequestParams,
+} from "./typings/types.ts";
 
-export { FetchError } from "./fetch.ts";
+export { FetchError } from "./fetch/fetch.ts";
 
 const defaultOptions: CBFetchOptions = {
   sandbox: false,

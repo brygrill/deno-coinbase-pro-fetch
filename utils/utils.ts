@@ -1,4 +1,4 @@
-import { Account, AccountExtended } from "./contract.ts";
+import { Account, AccountExtended } from "../typings/cb_contract.ts";
 
 export function extendAccount(item: Account): AccountExtended {
   return {

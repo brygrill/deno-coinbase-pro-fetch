@@ -1,9 +1,9 @@
 import { fetchOptions, noAuthOptions } from "./fetch_options.ts";
 import { fetchData } from "./fetch.ts";
-import { extendAccount } from "./utils.ts";
-import { EndpointConstants } from "./constants.ts";
-import type { CBAEndpointsSetup, MethodType } from "./types.ts";
-import type { Account, AccountExtended } from "./contract.ts";
+import { extendAccount } from "../utils/utils.ts";
+import { EndpointConstants } from "../constants.ts";
+import type { CBAEndpointsSetup, MethodType } from "../typings/types.ts";
+import type { Account, AccountExtended } from "../typings/cb_contract.ts";
 
 interface BuildFetchRequestOptions {
   endpoint: string;

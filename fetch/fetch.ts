@@ -1,4 +1,8 @@
-import type { FetchParams, FetchResp, InitFetchError } from "./types.ts";
+import type {
+  FetchParams,
+  FetchResp,
+  InitFetchError,
+} from "../typings/types.ts";
 
 export class FetchError extends Error {
   status: number;

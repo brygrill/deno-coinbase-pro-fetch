@@ -1,9 +1,9 @@
-import { decode, hmac } from "./deps.ts";
+import { decode, hmac } from "../deps.ts";
 import type {
   ContentType,
   FetchOptionsParams,
   FetchOptionsResp,
-} from "./types.ts";
+} from "../typings/types.ts";
 
 export const baseHeaders = {
   Accept: "application/json" as ContentType,
