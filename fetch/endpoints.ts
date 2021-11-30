@@ -53,7 +53,7 @@ export class Endpoints {
   }
 
   /** Make request to the `/accounts/:id` [endpoint](https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getaccount).*/
-  async accountsId(id: string): Promise<AccountExtended> {
+  async accountId(id: string): Promise<AccountExtended> {
     const { url, requestOptions } = buildFetchRequest(this.setup, {
       endpoint: `${EndpointConstants.AccountId(id)}`,
     });
@@ -87,4 +87,15 @@ export class Endpoints {
 
     return data;
   }
+
+    /** Make request to the `/products/:id` [endpoint](https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getproduct).*/
+    async productId(id: string): Promise<string[]> {
+      const url = buildUrl(this.setup.url, EndpointConstants.ProductId(id));
+      const { data } = await fetchData<string[]>({
+        url,
+        options: noAuthOptions,
+      });
+  
+      return data;
+    }
 }
