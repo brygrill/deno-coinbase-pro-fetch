@@ -11,9 +11,11 @@ export interface AccountModel {
 }
 
 export interface AccountModelExtended extends AccountModel {
-  balanceNum: number;
-  availableNum: number;
-  holdNum: number;
+  extended: {
+    balance: number;
+    available: number;
+    hold: number;
+  };
 }
 
 export interface CurrencyModel {
@@ -61,4 +63,24 @@ export interface ProductModel {
   status: string;
   "status_message": string;
   "auction_mode": false;
+}
+
+export interface QuoteModel {
+  "trade_id": number;
+  price: string;
+  size: string;
+  time: string;
+  bid: string;
+  ask: string;
+  volume: string;
+}
+
+export interface QuoteModelExtended extends QuoteModel {
+  extended: {
+    price: number;
+    size: number;
+    bid: number;
+    ask: number;
+    volume: number;
+  };
 }
