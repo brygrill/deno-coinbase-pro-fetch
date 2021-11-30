@@ -76,4 +76,15 @@ export class Endpoints {
 
     return data;
   }
+
+  /** Make request to the `/products` [endpoint](https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getproducts).*/
+  async products(): Promise<string[]> {
+    const url = buildUrl(this.setup.url, EndpointConstants.Products);
+    const { data } = await fetchData<string[]>({
+      url,
+      options: noAuthOptions,
+    });
+
+    return data;
+  }
 }
