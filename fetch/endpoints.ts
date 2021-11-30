@@ -3,7 +3,12 @@ import { fetchData } from "./fetch.ts";
 import { extendAccount } from "../utils/utils.ts";
 import { EndpointConstants } from "../constants.ts";
 import type { CBAEndpointsSetup, MethodType } from "../typings/types.ts";
-import type { Account, AccountExtended } from "../typings/cb_contract.ts";
+import type {
+  AccountModel,
+  AccountModelExtended,
+  CurrencyModel,
+  ProductModel,
+} from "../typings/cb_contract.ts";
 
 interface BuildFetchRequestOptions {
   endpoint: string;
@@ -39,12 +44,12 @@ export class Endpoints {
   }
 
   /** Make request to the `/accounts` [endpoint](https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getaccounts).*/
-  async accounts(): Promise<AccountExtended[]> {
+  async accounts(): Promise<AccountModelExtended[]> {
     const { url, requestOptions } = buildFetchRequest(this.setup, {
       endpoint: EndpointConstants.Accounts,
     });
     const { options } = fetchOptions(requestOptions);
-    const { data } = await fetchData<Account[]>({
+    const { data } = await fetchData<AccountModel[]>({
       url,
       options,
     });
@@ -53,12 +58,12 @@ export class Endpoints {
   }
 
   /** Make request to the `/accounts/:id` [endpoint](https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getaccount).*/
-  async accountId(id: string): Promise<AccountExtended> {
+  async accountId(id: string): Promise<AccountModelExtended> {
     const { url, requestOptions } = buildFetchRequest(this.setup, {
       endpoint: `${EndpointConstants.AccountId(id)}`,
     });
     const { options } = fetchOptions(requestOptions);
-    const { data } = await fetchData<Account>({
+    const { data } = await fetchData<AccountModel>({
       url,
       options,
     });
@@ -67,9 +72,9 @@ export class Endpoints {
   }
 
   /** Make request to the `/currencies` [endpoint](https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getcurrencies).*/
-  async currencies(): Promise<string[]> {
+  async currencies(): Promise<CurrencyModel[]> {
     const url = buildUrl(this.setup.url, EndpointConstants.Currencies);
-    const { data } = await fetchData<string[]>({
+    const { data } = await fetchData<CurrencyModel[]>({
       url,
       options: noAuthOptions,
     });
@@ -78,9 +83,9 @@ export class Endpoints {
   }
 
   /** Make request to the `/products` [endpoint](https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getproducts).*/
-  async products(): Promise<string[]> {
+  async products(): Promise<ProductModel[]> {
     const url = buildUrl(this.setup.url, EndpointConstants.Products);
-    const { data } = await fetchData<string[]>({
+    const { data } = await fetchData<ProductModel[]>({
       url,
       options: noAuthOptions,
     });
@@ -88,14 +93,14 @@ export class Endpoints {
     return data;
   }
 
-    /** Make request to the `/products/:id` [endpoint](https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getproduct).*/
-    async productId(id: string): Promise<string[]> {
-      const url = buildUrl(this.setup.url, EndpointConstants.ProductId(id));
-      const { data } = await fetchData<string[]>({
-        url,
-        options: noAuthOptions,
-      });
-  
-      return data;
-    }
+  /** Make request to the `/products/:id` [endpoint](https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getproduct).*/
+  async productId(id: string): Promise<ProductModel> {
+    const url = buildUrl(this.setup.url, EndpointConstants.ProductId(id));
+    const { data } = await fetchData<ProductModel>({
+      url,
+      options: noAuthOptions,
+    });
+
+    return data;
+  }
 }

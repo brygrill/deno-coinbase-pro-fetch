@@ -1,6 +1,6 @@
-import { Account, AccountExtended } from "../typings/cb_contract.ts";
+import { AccountModel, AccountModelExtended } from "../typings/cb_contract.ts";
 
-export function extendAccount(item: Account): AccountExtended {
+export function extendAccount(item: AccountModel): AccountModelExtended {
   return {
     ...item,
     balanceNum: Number(item.balance),
