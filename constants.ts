@@ -14,6 +14,10 @@ export class EndpointConstants {
 
   public static readonly Currencies = "/currencies";
 
+  public static CurrencyId(id: string) {
+    return `${this.Currencies}/${id}`;
+  }
+
   public static readonly Products = "/products";
 
   public static ProductId(id: string) {

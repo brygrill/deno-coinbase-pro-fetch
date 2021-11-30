@@ -82,6 +82,17 @@ export class Endpoints {
     return data;
   }
 
+  /** Make request to the `/currency/:id` [endpoint](https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getcurrency).*/
+  async currencyId(id: string): Promise<CurrencyModel> {
+    const url = buildUrl(this.setup.url, EndpointConstants.CurrencyId(id));
+    const { data } = await fetchData<CurrencyModel>({
+      url,
+      options: noAuthOptions,
+    });
+
+    return data;
+  }
+
   /** Make request to the `/products` [endpoint](https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getproducts).*/
   async products(): Promise<ProductModel[]> {
     const url = buildUrl(this.setup.url, EndpointConstants.Products);
