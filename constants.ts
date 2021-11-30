@@ -23,4 +23,8 @@ export class EndpointConstants {
   public static ProductId(id: string) {
     return `${this.Products}/${id}`;
   }
+
+  public static Quote(id: string) {
+    return `${this.Products}/${id}/ticker`;
+  }
 }

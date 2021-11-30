@@ -1,6 +1,6 @@
 import { fetchOptions, noAuthOptions } from "./fetch_options.ts";
 import { fetchData } from "./fetch.ts";
-import { extendAccount } from "../utils/utils.ts";
+import { extendAccount, extendQuote } from "../utils/utils.ts";
 import { EndpointConstants } from "../constants.ts";
 import type { CBAEndpointsSetup, MethodType } from "../typings/types.ts";
 import type {
@@ -8,6 +8,8 @@ import type {
   AccountModelExtended,
   CurrencyModel,
   ProductModel,
+  QuoteModel,
+  QuoteModelExtended,
 } from "../typings/cb_contract.ts";
 
 interface BuildFetchRequestOptions {
@@ -113,5 +115,16 @@ export class Endpoints {
     });
 
     return data;
+  }
+
+  /** Make request to the `/products/:id/ticker` [endpoint](https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getproductticker).*/
+  async quote(id: string): Promise<QuoteModelExtended> {
+    const url = buildUrl(this.setup.url, EndpointConstants.Quote(id));
+    const { data } = await fetchData<QuoteModel>({
+      url,
+      options: noAuthOptions,
+    });
+
+    return extendQuote(data);
   }
 }
