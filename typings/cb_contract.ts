@@ -18,6 +18,26 @@ export interface AccountModelExtended extends AccountModel {
 
 export interface CurrencyModel {
   id: string;
+  name: string;
+  "min_size": string;
+  status: string;
+  message: string;
+  "max_precision": string;
+  "convertible_to": string[];
+  details: {
+    type: string;
+    symbol: string | null;
+    "network_confirmations": number;
+    "sort_order": number;
+    "crypto_address_link": string;
+    "crypto_transaction_link": string;
+    "push_payment_methods": string[];
+    "group_types": string[];
+    "display_name": string | null;
+    "processing_time_seconds": string | null;
+    "min_withdrawal_amount": number;
+    "max_withdrawal_amount": number;
+  };
 }
 
 export interface ProductModel {
