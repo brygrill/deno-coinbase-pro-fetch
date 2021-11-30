@@ -3,6 +3,8 @@ export class Constants {
 
   public static readonly SandboxUrl =
     "https://api-public.sandbox.exchange.coinbase.com";
+
+  public static readonly ValidFiat = ["USD", "EUR"];
 }
 
 export class EndpointConstants {

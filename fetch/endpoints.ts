@@ -120,11 +120,12 @@ export class Endpoints {
   /** Make request to the `/products/:id/ticker` [endpoint](https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getproductticker).*/
   async quote(id: string): Promise<QuoteModelExtended> {
     const url = buildUrl(this.setup.url, EndpointConstants.Quote(id));
+    const currency = id.split("-")[1]; // TODO: add currency to constructor
     const { data } = await fetchData<QuoteModel>({
       url,
       options: noAuthOptions,
     });
 
-    return extendQuote(data);
+    return extendQuote(data, currency);
   }
 }

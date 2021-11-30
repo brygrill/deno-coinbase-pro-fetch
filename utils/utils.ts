@@ -1,3 +1,4 @@
+import { Constants } from "../constants.ts";
 import {
   AccountModel,
   AccountModelExtended,
@@ -16,11 +17,22 @@ export function extendAccount(item: AccountModel): AccountModelExtended {
   };
 }
 
-export function extendQuote(item: QuoteModel): QuoteModelExtended {
+export function extendQuote(
+  item: QuoteModel,
+  currency = "USD",
+): QuoteModelExtended {
+  // validate currency arg
+  const valid = Constants.ValidFiat.includes(currency);
   return {
     ...item,
-    extended: {
+    extended: { // TODO: breakout formatter
       price: Number(item.price),
+      priceFormatted: valid
+        ? new Intl.NumberFormat("en", {
+          style: "currency",
+          currency,
+        }).format(Number(item.price))
+        : "-",
       size: Number(item.size),
       bid: Number(item.bid),
       ask: Number(item.ask),
