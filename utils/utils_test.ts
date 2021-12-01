@@ -1,5 +1,5 @@
 import { assertEquals } from "https://deno.land/std@0.114.0/testing/asserts.ts";
-import { extendAccount } from "./utils.ts";
+import { extendAccount, extendQuote } from "./utils.ts";
 
 Deno.test("extendAccount", function () {
   const test1 = extendAccount({
@@ -12,6 +12,20 @@ Deno.test("extendAccount", function () {
     trading_enabled: true,
   });
   assertEquals(test1.trading_enabled, true);
-  assertEquals(test1.balanceNum, 1000.987260000000);
-  assertEquals(test1.holdNum, 0.0000000000000000);
+  assertEquals(test1.extended.balance, 1000.987260000000);
+  assertEquals(test1.extended.hold, 0.0000000000000000);
+});
+
+Deno.test("extendQuote", function () {
+  const test1 = extendQuote({
+    trade_id: 12786182,
+    price: "57169.09",
+    size: "0.024864",
+    time: "2021-12-01T22:06:25.613989Z",
+    bid: "57157.84",
+    ask: "57169.09",
+    volume: "451.62277118",
+  });
+  assertEquals(test1.extended.price, 57169.09);
+  assertEquals(test1.extended.priceFormatted, "$57,169.09");
 });
