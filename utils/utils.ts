@@ -5,6 +5,7 @@ import {
   QuoteModel,
   QuoteModelExtended,
 } from "../typings/cb_contract.ts";
+import { formatCurrency } from "./format.ts";
 
 export function extendAccount(item: AccountModel): AccountModelExtended {
   return {
@@ -19,20 +20,15 @@ export function extendAccount(item: AccountModel): AccountModelExtended {
 
 export function extendQuote(
   item: QuoteModel,
-  currency = "USD",
+  currency = Constants.DefaultCurrency,
 ): QuoteModelExtended {
-  // validate currency arg
-  const valid = Constants.ValidFiat.includes(currency);
+  const priceNum = Number(item.price);
+
   return {
     ...item,
-    extended: { // TODO: breakout formatter
-      price: Number(item.price),
-      priceFormatted: valid
-        ? new Intl.NumberFormat("en", {
-          style: "currency",
-          currency,
-        }).format(Number(item.price))
-        : "-",
+    extended: {
+      price: priceNum,
+      priceFormatted: formatCurrency(priceNum, currency),
       size: Number(item.size),
       bid: Number(item.bid),
       ask: Number(item.ask),

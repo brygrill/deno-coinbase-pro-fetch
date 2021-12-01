@@ -15,6 +15,8 @@ export type FetchOptionsParams = CBAccessSetup & RequestParams;
 
 export type ContentType = "application/json";
 
+export type CurrencyOptionsType = "USD" | "EUR" | "GBP";
+
 export type CBAccessHeadersResp = {
   Accept: ContentType;
   "Content-Type": ContentType;
@@ -31,6 +33,7 @@ export type FetchOptionsResp = {
 
 export interface CBFetchOptions {
   sandbox?: boolean;
+  currency?: CurrencyOptionsType;
 }
 
 export interface FetchParams {
@@ -52,4 +55,5 @@ export interface InitFetchError {
 
 export interface CBAEndpointsSetup extends CBAccessSetup {
   url: string;
+  currency?: CurrencyOptionsType;
 }

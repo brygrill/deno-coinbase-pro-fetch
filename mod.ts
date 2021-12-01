@@ -12,6 +12,7 @@ export { FetchError } from "./fetch/fetch.ts";
 
 const defaultOptions: CBFetchOptions = {
   sandbox: false,
+  currency: "USD",
 };
 
 /** Make requests to the Coinbase Pro API. Setup with [APIKey, Passphrase, and Secret](https://docs.cloud.coinbase.com/exchange/docs/authorization-and-authentication). */
@@ -28,7 +29,11 @@ export class CBFetch {
     this.setup = setup;
     this.options = options;
     this.url = baseURL;
-    this.endpoints = new Endpoints({ ...setup, url: baseURL });
+    this.endpoints = new Endpoints({
+      ...setup,
+      url: baseURL,
+      currency: options.currency,
+    });
   }
 
   /** Returns `fetch` request `options` and CB API request Headers */
