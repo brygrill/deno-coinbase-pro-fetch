@@ -1,17 +1,15 @@
-import { superdeno } from "https://deno.land/x/superdeno/mod.ts";
-import { opine } from "https://deno.land/x/opine@1.9.1/mod.ts";
+import { assertExists } from 'https://deno.land/std@0.114.0/testing/asserts.ts';
+import { Endpoints } from './endpoints.ts';
 
-const app = opine();
-
-app.get("/user", (_req, res) => {
-  res.setStatus(200).json({ name: "Deno" });
-});
-
-superdeno(app)
-  .get("/user")
-  .expect("Content-Type", /json/)
-  .expect("Content-Length", "15")
-  .expect(200)
-  .end((err, _res) => {
-    if (err) throw err;
+Deno.test('Endpoints', function () {
+  const testEndpoints = new Endpoints({
+    apiKey: 'APIKEY',
+    passPhrase: 'PASSPHRASE',
+    secret: 'SECRET',
+    url: 'test',
   });
+  assertExists(testEndpoints.accounts);
+  assertExists(testEndpoints.currencies);
+  assertExists(testEndpoints.products);
+  assertExists(testEndpoints.quote);
+});
