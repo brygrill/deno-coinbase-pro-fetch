@@ -1,4 +1,7 @@
-import { assertThrowsAsync, assertExists } from "https://deno.land/std@0.114.0/testing/asserts.ts";
+import {
+  assertExists,
+  assertThrowsAsync,
+} from "https://deno.land/std@0.114.0/testing/asserts.ts";
 import { fetchData } from "./fetch.ts";
 
 Deno.test("fetchData", async function () {
@@ -20,6 +23,6 @@ Deno.test("fetchData", async function () {
     options: {
       method: "GET",
     },
-  })
-  assertExists(testData)
+  });
+  assertExists(testData);
 });
