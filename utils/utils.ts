@@ -20,12 +20,14 @@ export function extendAccount(item: AccountModel): AccountModelExtended {
 
 export function extendQuote(
   item: QuoteModel,
+  id: string,
   currency = Constants.DefaultCurrency,
 ): QuoteModelExtended {
   const priceNum = Number(item.price);
 
   return {
     ...item,
+    pair: id,
     extended: {
       price: priceNum,
       priceFormatted: formatCurrency(priceNum, currency),

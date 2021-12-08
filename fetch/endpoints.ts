@@ -125,7 +125,7 @@ export class Endpoints {
       options: noAuthOptions,
     });
 
-    return extendQuote(data, this.setup.currency);
+    return extendQuote(data, id, this.setup.currency);
   }
 
   /** Make batch request to the `/products/:id/ticker` [endpoint](https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getproductticker).*/

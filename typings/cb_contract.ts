@@ -76,6 +76,7 @@ export interface QuoteModel {
 }
 
 export interface QuoteModelExtended extends QuoteModel {
+  pair: string;
   extended: {
     price: number;
     priceFormatted: string;
