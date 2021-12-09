@@ -5,6 +5,8 @@ export class Constants {
     "https://api-public.sandbox.exchange.coinbase.com";
 
   public static readonly DefaultCurrency = "USD";
+
+  public static readonly FiatCurrency = ["USD", "EUR", "GBP"];
 }
 
 export class EndpointConstants {

@@ -1,7 +1,7 @@
 import { fetchOptions, noAuthOptions } from "./fetch_options.ts";
 import { fetchData } from "./fetch.ts";
 import { extendAccount, extendQuote } from "../utils/utils.ts";
-import { EndpointConstants } from "../constants.ts";
+import { Constants, EndpointConstants } from "../constants.ts";
 import type { CBAEndpointsSetup, MethodType } from "../typings/types.ts";
 import type {
   AccountModel,
@@ -45,8 +45,12 @@ export class Endpoints {
     this.setup = setup;
   }
 
-  /** Make request to the `/accounts` [endpoint](https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getaccounts).*/
-  async accounts(): Promise<AccountModelExtended[]> {
+  /** Make request to the `/accounts` [endpoint](https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getaccounts).
+   * Pass `true` for `withBalance` option to return accounts with balance greater than 0.
+   */
+  async accounts(
+    { withBalance } = { withBalance: false },
+  ): Promise<AccountModelExtended[]> {
     const { url, requestOptions } = buildFetchRequest(this.setup, {
       endpoint: EndpointConstants.Accounts,
     });
@@ -56,7 +60,13 @@ export class Endpoints {
       options,
     });
 
-    return data.map((i) => extendAccount(i));
+    const extended = data.map((i) => extendAccount(i));
+
+    if (withBalance) {
+      return extended.filter((i) => i.extended.balance > 0);
+    }
+
+    return extended;
   }
 
   /** Make request to the `/accounts/:id` [endpoint](https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getaccount).*/
@@ -131,5 +141,13 @@ export class Endpoints {
   /** Make batch request to the `/products/:id/ticker` [endpoint](https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getproductticker).*/
   quotes(ids: string[]): Promise<QuoteModelExtended[]> {
     return Promise.all(ids.map((i) => this.quote(i)));
+  }
+
+  async assets(): Promise<any> {
+    const accounts = await this.accounts({ withBalance: true });
+    const ids = accounts.filter((i) =>
+      !Constants.FiatCurrency.includes(i.currency)
+    ).map((a) => `${a.currency}-${this.setup.currency}`);
+    return { accounts, ids };
   }
 }
