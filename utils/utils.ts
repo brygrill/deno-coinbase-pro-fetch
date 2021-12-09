@@ -28,9 +28,10 @@ export function extendQuote(
   return {
     ...item,
     pair: id,
+    crypto: id.split("-")[0] || null, // id should be formatted like BTC-USD
+    priceFormatted: formatCurrency(priceNum, currency),
     extended: {
       price: priceNum,
-      priceFormatted: formatCurrency(priceNum, currency),
       size: Number(item.size),
       bid: Number(item.bid),
       ask: Number(item.ask),

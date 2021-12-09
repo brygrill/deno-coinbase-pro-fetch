@@ -25,7 +25,9 @@ Deno.test("extendQuote", function () {
     bid: "57157.84",
     ask: "57169.09",
     volume: "451.62277118",
-  });
+  }, "BTC-USD");
   assertEquals(test1.extended.price, 57169.09);
-  assertEquals(test1.extended.priceFormatted, "$57,169.09");
+  assertEquals(test1.priceFormatted, "$57,169.09");
+  assertEquals(test1.pair, "BTC-USD");
+  assertEquals(test1.crypto, "BTC");
 });

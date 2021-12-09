@@ -77,9 +77,10 @@ export interface QuoteModel {
 
 export interface QuoteModelExtended extends QuoteModel {
   pair: string;
+  crypto: string | null;
+  priceFormatted: string;
   extended: {
     price: number;
-    priceFormatted: string;
     size: number;
     bid: number;
     ask: number;
