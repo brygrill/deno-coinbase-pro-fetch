@@ -25,7 +25,7 @@ try {
 
   const quotes = await cb.endpoints.quotes(["BTC-USD", "ETH-USD"]);
 
-  const assets = await cb.endpoints.assets()
+  const assets = await cb.endpoints.assets();
 
   // console.log(withBalance);
   // console.log(btcAccount);
@@ -33,7 +33,7 @@ try {
   // console.log(product.id);
   // console.log(quote);
   // console.log(quotes);
-  console.log(assets)
+  console.log(assets);
 } catch (error) {
   if (error instanceof FetchError) {
     console.log(error.toJSON());
