@@ -1,8 +1,8 @@
 import { decode, hmac } from "../deps.ts";
 import type {
   ContentType,
-  FetchOptionsParams,
-  FetchOptionsResp,
+  FetchOptionsParamsType,
+  FetchOptionsRespModel,
 } from "../typings/types.ts";
 
 export const baseHeaders = {
@@ -23,7 +23,7 @@ export function fetchOptions({
   method,
   requestPath,
   body,
-}: FetchOptionsParams): FetchOptionsResp {
+}: FetchOptionsParamsType): FetchOptionsRespModel {
   const timeStamp = Date.now() / 1000;
   const key = decode(secret);
   const msg = `${timeStamp}${method}${requestPath}${body}`;

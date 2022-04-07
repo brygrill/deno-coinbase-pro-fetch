@@ -1,14 +1,14 @@
 import type {
-  FetchParams,
-  FetchResp,
-  InitFetchError,
+  FetchParamsModel,
+  FetchRespModel,
+  InitFetchErrorModel,
 } from "../typings/types.ts";
 
 export class FetchError extends Error {
   status: number;
   url: string;
 
-  constructor(init: InitFetchError) {
+  constructor(init: InitFetchErrorModel) {
     super(init.message);
     this.status = init.status;
     this.url = init.url;
@@ -31,7 +31,7 @@ export class FetchError extends Error {
 export async function fetchData<T>({
   url,
   options,
-}: FetchParams): Promise<FetchResp<T>> {
+}: FetchParamsModel): Promise<FetchRespModel<T>> {
   const response = await fetch(url, options);
   const jsonData = await response.json();
 

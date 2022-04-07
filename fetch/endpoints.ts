@@ -2,7 +2,7 @@ import { fetchOptions, noAuthOptions } from "./fetch_options.ts";
 import { fetchData } from "./fetch.ts";
 import { extendAccount, extendQuote } from "../utils/utils.ts";
 import { Constants, EndpointConstants } from "../constants.ts";
-import type { CBAEndpointsSetup, MethodType } from "../typings/types.ts";
+import type { CBEndpointsSetupModel, MethodType } from "../typings/types.ts";
 import type {
   AccountModel,
   AccountModelExtended,
@@ -23,7 +23,7 @@ function buildUrl(baseUrl: string, endpoint: string) {
 }
 
 function buildFetchRequest(
-  setup: CBAEndpointsSetup,
+  setup: CBEndpointsSetupModel,
   { endpoint, method = "GET", body = "" }: BuildFetchRequestOptions,
 ) {
   const { url: baseUrl, ...rest } = setup;
@@ -39,9 +39,9 @@ function buildFetchRequest(
 }
 
 export class Endpoints {
-  protected readonly setup: CBAEndpointsSetup;
+  protected readonly setup: CBEndpointsSetupModel;
 
-  constructor(setup: CBAEndpointsSetup) {
+  constructor(setup: CBEndpointsSetupModel) {
     this.setup = setup;
   }
 

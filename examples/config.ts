@@ -1,4 +1,4 @@
-import { config, CBAccessSetup } from './deps.ts';
+import { config, CBAccessSetupModel } from './deps.ts';
 const {
   APIKEY,
   PASSPHRASE,
@@ -13,7 +13,7 @@ interface ConfigModel {
 }
 
 /** return elements for CB access based on sandbox arg */
-export const setConfig = (options?: ConfigModel): CBAccessSetup => {
+export const setConfig = (options?: ConfigModel): CBAccessSetupModel => {
   const sb = options?.sandbox ?? false;
   return {
     apiKey: sb ? SANDBOX_APIKEY : APIKEY,
