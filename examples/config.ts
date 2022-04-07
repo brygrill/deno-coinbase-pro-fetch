@@ -13,7 +13,7 @@ interface ConfigModel {
 }
 
 /** return elements for CB access based on sandbox arg */
-export const setConfig = (options?: ConfigModel): CBAccessSetupModel => {
+export const getAccessConfig = (options?: ConfigModel): CBAccessSetupModel => {
   const sb = options?.sandbox ?? false;
   return {
     apiKey: sb ? SANDBOX_APIKEY : APIKEY,

@@ -135,6 +135,7 @@ export class Endpoints {
       options: noAuthOptions,
     });
 
+    // todo setup axios like return of data, error, status, etc, option to throw?
     return extendQuote(data, id, this.setup.currency);
   }
 

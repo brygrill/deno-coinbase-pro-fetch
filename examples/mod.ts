@@ -1,9 +1,8 @@
-import { CBFetch, config, FetchError } from './deps.ts';
-import { setConfig } from './config.ts';
+import { CBFetch, FetchError } from './deps.ts';
+import { getAccessConfig } from './config.ts';
 
 const env = { sandbox: true };
-const accessConfig = setConfig(env);
-const cb = new CBFetch(accessConfig, env);
+const cb = new CBFetch(getAccessConfig(env), env);
 
 try {
   const accounts = await cb.endpoints.accounts();
@@ -11,16 +10,16 @@ try {
   const accountsWithBalance = await cb.endpoints.accounts({withBalance: true});
 
   const btcAccount = await cb.endpoints.accountId(
-    'ca632e25-25f0-4c8f-a535-99f4a7eab324',
+    accounts.find((a) => a.currency === 'BTC')?.id ?? '',
   );
 
   const currencies = await cb.endpoints.currencyId('BTC');
 
   const product = await cb.endpoints.productId('BTC-USD');
 
-  const quote = await cb.endpoints.quote('BTC-USDC');
+  const quote = await cb.endpoints.quote('BTC-USD'); //BTC-USDC will break this
 
-  const quotes = await cb.endpoints.quotes(['BTC-USD', 'ETH-USD']);
+  const quotes = await cb.endpoints.quotes(['BTC-USD', 'LINK-USD']); //ETH-USD will break this
 
   const assets = await cb.endpoints.assets();
 
@@ -34,7 +33,7 @@ try {
     quotes,
     assets,
   };
-  console.dir({ assets: data.assets });
+  console.dir({ data });
 } catch (error) {
   if (error instanceof FetchError) {
     console.dir({ err: error.toJSON() });
