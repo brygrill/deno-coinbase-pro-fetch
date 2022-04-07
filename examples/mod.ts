@@ -19,7 +19,7 @@ try {
 
   const quote = await cb.endpoints.quote('BTC-USD'); //BTC-USDC will break this
 
-  const quotes = await cb.endpoints.quotes(['BTC-USD', 'LINK-USD']); //ETH-USD will break this
+  const quotes = await cb.endpoints.quotes(['BTC-USD', 'ETH-USD']).catch(e => {return "oops"})
 
   const assets = await cb.endpoints.assets();
 
