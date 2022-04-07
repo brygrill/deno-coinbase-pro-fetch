@@ -9,6 +9,7 @@ import type {
 } from "./typings/types.ts";
 
 export { FetchError } from "./fetch/fetch.ts";
+export * from "./typings/types.ts";
 
 const defaultOptions: CBFetchOptions = {
   sandbox: false,
