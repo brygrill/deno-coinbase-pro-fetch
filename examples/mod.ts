@@ -2,15 +2,13 @@ import { CBFetch, config, FetchError } from './deps.ts';
 import { setConfig } from './config.ts';
 
 const env = { sandbox: true };
-const accessConfig = setConfig(env)
-const cb = new CBFetch(
-  accessConfig,
-  env,
-);
+const accessConfig = setConfig(env);
+const cb = new CBFetch(accessConfig, env);
 
 try {
   const accounts = await cb.endpoints.accounts();
-  const withBalance = accounts.filter((i) => Number(i.balance) > 0);
+
+  const accountsWithBalance = await cb.endpoints.accounts({withBalance: true});
 
   const btcAccount = await cb.endpoints.accountId(
     'ca632e25-25f0-4c8f-a535-99f4a7eab324',
@@ -26,15 +24,19 @@ try {
 
   const assets = await cb.endpoints.assets();
 
-  // console.log(withBalance);
-  // console.log(btcAccount);
-  // console.log(currencies.details.symbol);
-  // console.log(product.id);
-  // console.log(quote);
-  // console.log(quotes);
-  console.log(assets);
+  const data = {
+    accounts,
+    accountsWithBalance,
+    btcAccount,
+    currencies,
+    product,
+    quote,
+    quotes,
+    assets,
+  };
+  console.dir({ assets: data.assets });
 } catch (error) {
   if (error instanceof FetchError) {
-    console.log(error.toJSON());
+    console.dir({ err: error.toJSON() });
   }
 }
