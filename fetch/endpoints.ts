@@ -1,12 +1,12 @@
-import { fetchOptions, noAuthOptions } from './fetch_options.ts';
-import { fetchData } from './fetch.ts';
-import { extendAccount, extendQuote } from '../utils/utils.ts';
-import { Constants, EndpointConstants } from '../constants.ts';
+import { fetchOptions, noAuthOptions } from "./fetch_options.ts";
+import { fetchData } from "./fetch.ts";
+import { extendAccount, extendQuote } from "../utils/utils.ts";
+import { Constants, EndpointConstants } from "../constants.ts";
 import type {
   CBEndpointsSetupModel,
-  MethodType,
   EndpointResponseType,
-} from '../typings/types.ts';
+  MethodType,
+} from "../typings/types.ts";
 import type {
   AccountModel,
   AccountModelExtended,
@@ -14,7 +14,7 @@ import type {
   ProductModel,
   QuoteModel,
   QuoteModelExtended,
-} from '../typings/cb_contract.ts';
+} from "../typings/cb_contract.ts";
 
 interface BuildFetchRequestOptions {
   endpoint: string;
@@ -28,7 +28,7 @@ function buildUrl(baseUrl: string, endpoint: string) {
 
 function buildFetchRequest(
   setup: CBEndpointsSetupModel,
-  { endpoint, method = 'GET', body = '' }: BuildFetchRequestOptions,
+  { endpoint, method = "GET", body = "" }: BuildFetchRequestOptions,
 ) {
   const { url: baseUrl, ...rest } = setup;
   const url = buildUrl(baseUrl, endpoint);
@@ -145,7 +145,7 @@ export class Endpoints {
   /** Make batch request to the `/products/:id/ticker` [endpoint](https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getproductticker).*/
   async quotes(ids: string[]): EndpointResponseType<QuoteModelExtended[]> {
     const data = await Promise.all(ids.map((i) => this.quote(i))).then((i) =>
-      i.map((j) => j.data),
+      i.map((j) => j.data)
     );
     return { data };
   }
@@ -156,7 +156,7 @@ export class Endpoints {
       .filter((i) => !Constants.FiatCurrency.includes(i.currency))
       .map((a) => `${a.currency}-${this.setup.currency}`);
     return {
-      data: { accounts, ids },
+      data: { accounts, ids }, // TODO: add more data
     };
   }
 }

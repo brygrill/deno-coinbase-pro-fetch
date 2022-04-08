@@ -4,6 +4,7 @@ import { getAccessConfig } from "./config.ts";
 const env = { sandbox: true };
 const cb = new CBFetch(getAccessConfig(env), env);
 
+// TODO: promise all settled
 try {
   const accounts = await cb.endpoints.accounts();
 
@@ -38,7 +39,7 @@ try {
     assets,
   };
   console.dir({ data });
-  console.dir({q: quotes.data})
+  console.dir({ q: quotes.data });
 } catch (error) {
   fetchErrUtil(error);
 }

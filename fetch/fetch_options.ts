@@ -29,6 +29,7 @@ export function fetchOptions({
   const msg = `${timeStamp}${method}${requestPath}${body}`;
   const sign = hmac("sha256", key, msg, "utf8", "base64") as string;
 
+  // TODO break this out into a function
   const headers = {
     ...baseHeaders,
     "cb-access-key": apiKey,

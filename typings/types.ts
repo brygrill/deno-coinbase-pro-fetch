@@ -4,7 +4,7 @@ export interface CBAccessSetupModel {
   secret: string;
 }
 
-export type MethodType = 'GET' | 'POST';
+export type MethodType = "GET" | "POST";
 
 export interface RequestParamsModel {
   method: MethodType;
@@ -14,17 +14,17 @@ export interface RequestParamsModel {
 
 export type FetchOptionsParamsType = CBAccessSetupModel & RequestParamsModel;
 
-export type ContentType = 'application/json';
+export type ContentType = "application/json";
 
-export type CurrencyOptionsType = 'USD' | 'EUR' | 'GBP';
+export type CurrencyOptionsType = "USD" | "EUR" | "GBP";
 
 export type CBAccessHeadersRespModel = {
   Accept: ContentType;
-  'Content-Type': ContentType;
-  'cb-access-key': string; // the API key
-  'cb-access-passphrase': string; // phasephrase when API registered
-  'cb-access-sign': string; // hmac sign
-  'cb-access-timestamp': number; // timestamp
+  "Content-Type": ContentType;
+  "cb-access-key": string; // the API key
+  "cb-access-passphrase": string; // phasephrase when API registered
+  "cb-access-sign": string; // hmac sign
+  "cb-access-timestamp": number; // timestamp
 };
 
 export type FetchOptionsRespModel = {

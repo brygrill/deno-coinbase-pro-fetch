@@ -1,4 +1,4 @@
-import type { InitFetchErrorModel } from '../typings/types.ts';
+import type { InitFetchErrorModel } from "../typings/types.ts";
 
 export class FetchError extends Error {
   status: number;
@@ -58,7 +58,7 @@ export const fetchErrUtil = (
   // return default error
   return {
     ...base,
-    details: { fetchError: false, status: 0, message: error.message, url: '' },
+    details: { fetchError: false, status: 0, message: error.message, url: "" },
     stack: error.stack,
   };
 };
