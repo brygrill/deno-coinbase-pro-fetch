@@ -1,4 +1,4 @@
-import { config, CBAccessSetupModel } from './deps.ts';
+import { CBAccessSetupModel, config } from "./deps.ts";
 const {
   APIKEY,
   PASSPHRASE,
