@@ -7,8 +7,7 @@ import type {
   CBFetchOptionsModel,
   RequestParamsModel,
 } from "./typings/types.ts";
-
-export { FetchError } from "./fetch/fetch.ts";
+export * from "./fetch/fetch_err.ts";
 export * from "./typings/types.ts";
 
 const defaultOptions: CBFetchOptionsModel = {

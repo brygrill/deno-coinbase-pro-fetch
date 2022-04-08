@@ -1,31 +1,8 @@
+import { FetchError } from './fetch_err.ts';
 import type {
   FetchParamsModel,
   FetchRespModel,
-  InitFetchErrorModel,
-} from "../typings/types.ts";
-
-export class FetchError extends Error {
-  status: number;
-  url: string;
-
-  constructor(init: InitFetchErrorModel) {
-    super(init.message);
-    this.status = init.status;
-    this.url = init.url;
-  }
-
-  toString() {
-    return `Status: ${this.status}, Message: ${this.message}`;
-  }
-
-  toJSON() {
-    return {
-      status: this.status,
-      message: this.message,
-      url: this.url,
-    };
-  }
-}
+} from '../typings/types.ts';
 
 /** Make an async call to the CB API. Non 200s are caught and returned via FetchError class */
 export async function fetchData<T>({
@@ -38,7 +15,7 @@ export async function fetchData<T>({
   if (response.status !== 200) {
     throw new FetchError({
       status: response.status,
-      message: jsonData?.message || "Error fetching data", // an object with the key message is standard response
+      message: jsonData?.message || 'Error fetching data', // an object with the key message is standard response
       url,
     });
   }

@@ -1,4 +1,4 @@
-import { CBFetch, FetchError } from './deps.ts';
+import { CBFetch, fetchErrUtil } from './deps.ts';
 import { getAccessConfig } from './config.ts';
 
 const env = { sandbox: true };
@@ -19,7 +19,7 @@ try {
 
   const quote = await cb.endpoints.quote('BTC-USD'); //BTC-USDC will break this
 
-  const quotes = await cb.endpoints.quotes(['BTC-USD', 'ETH-USD']).catch(e => {return "oops"})
+  const quotes = await cb.endpoints.quotes(['BTC-USD', 'ETH-USD']).catch(e => fetchErrUtil(e))
 
   const assets = await cb.endpoints.assets();
 
@@ -35,7 +35,5 @@ try {
   };
   console.dir({ data });
 } catch (error) {
-  if (error instanceof FetchError) {
-    console.dir({ err: error.toJSON() });
-  }
+  fetchErrUtil(error);
 }
