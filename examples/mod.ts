@@ -12,7 +12,7 @@ try {
   });
 
   const btcAccount = await cb.endpoints.accountId(
-    accounts.find((a) => a.currency === "BTC")?.id ?? "",
+    accounts.data.find((a) => a.currency === "BTC")?.id ?? "",
   );
 
   const currencies = await cb.endpoints.currencyId("BTC");
@@ -21,7 +21,7 @@ try {
 
   const quote = await cb.endpoints.quote("BTC-USD"); //BTC-USDC will break this
 
-  const quotes = await cb.endpoints.quotes(["BTC-USD", "ETH-USD"]).catch((e) =>
+  const quotes = await cb.endpoints.quotes(["BTC-USD", "LINK-USD"]).catch((e) =>
     fetchErrUtil(e)
   );
 
@@ -38,6 +38,7 @@ try {
     assets,
   };
   console.dir({ data });
+  console.dir({q: quotes.data})
 } catch (error) {
   fetchErrUtil(error);
 }

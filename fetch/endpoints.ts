@@ -1,8 +1,12 @@
-import { fetchOptions, noAuthOptions } from "./fetch_options.ts";
-import { fetchData } from "./fetch.ts";
-import { extendAccount, extendQuote } from "../utils/utils.ts";
-import { Constants, EndpointConstants } from "../constants.ts";
-import type { CBEndpointsSetupModel, MethodType } from "../typings/types.ts";
+import { fetchOptions, noAuthOptions } from './fetch_options.ts';
+import { fetchData } from './fetch.ts';
+import { extendAccount, extendQuote } from '../utils/utils.ts';
+import { Constants, EndpointConstants } from '../constants.ts';
+import type {
+  CBEndpointsSetupModel,
+  MethodType,
+  EndpointResponseType,
+} from '../typings/types.ts';
 import type {
   AccountModel,
   AccountModelExtended,
@@ -10,7 +14,7 @@ import type {
   ProductModel,
   QuoteModel,
   QuoteModelExtended,
-} from "../typings/cb_contract.ts";
+} from '../typings/cb_contract.ts';
 
 interface BuildFetchRequestOptions {
   endpoint: string;
@@ -24,7 +28,7 @@ function buildUrl(baseUrl: string, endpoint: string) {
 
 function buildFetchRequest(
   setup: CBEndpointsSetupModel,
-  { endpoint, method = "GET", body = "" }: BuildFetchRequestOptions,
+  { endpoint, method = 'GET', body = '' }: BuildFetchRequestOptions,
 ) {
   const { url: baseUrl, ...rest } = setup;
   const url = buildUrl(baseUrl, endpoint);
@@ -50,7 +54,7 @@ export class Endpoints {
    */
   async accounts(
     { withBalance } = { withBalance: false },
-  ): Promise<AccountModelExtended[]> {
+  ): EndpointResponseType<AccountModelExtended[]> {
     const { url, requestOptions } = buildFetchRequest(this.setup, {
       endpoint: EndpointConstants.Accounts,
     });
@@ -63,91 +67,96 @@ export class Endpoints {
     const extended = data.map((i) => extendAccount(i));
 
     if (withBalance) {
-      return extended.filter((i) => i.extended.balance > 0);
+      return { data: extended.filter((i) => i.extended.balance > 0) };
     }
 
-    return extended;
+    return { data: extended };
   }
 
   /** Make request to the `/accounts/:id` [endpoint](https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getaccount).*/
-  async accountId(id: string): Promise<AccountModelExtended> {
+  async accountId(id: string): EndpointResponseType<AccountModelExtended> {
     const { url, requestOptions } = buildFetchRequest(this.setup, {
       endpoint: `${EndpointConstants.AccountId(id)}`,
     });
     const { options } = fetchOptions(requestOptions);
-    const { data } = await fetchData<AccountModel>({
+    const resp = await fetchData<AccountModel>({
       url,
       options,
     });
 
-    return extendAccount(data);
+    return { data: extendAccount(resp.data) };
   }
 
   /** Make request to the `/currencies` [endpoint](https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getcurrencies).*/
-  async currencies(): Promise<CurrencyModel[]> {
+  async currencies(): EndpointResponseType<CurrencyModel[]> {
     const url = buildUrl(this.setup.url, EndpointConstants.Currencies);
-    const { data } = await fetchData<CurrencyModel[]>({
+    const resp = await fetchData<CurrencyModel[]>({
       url,
       options: noAuthOptions,
     });
 
-    return data;
+    return { data: resp.data };
   }
 
   /** Make request to the `/currency/:id` [endpoint](https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getcurrency).*/
-  async currencyId(id: string): Promise<CurrencyModel> {
+  async currencyId(id: string): EndpointResponseType<CurrencyModel> {
     const url = buildUrl(this.setup.url, EndpointConstants.CurrencyId(id));
-    const { data } = await fetchData<CurrencyModel>({
+    const resp = await fetchData<CurrencyModel>({
       url,
       options: noAuthOptions,
     });
 
-    return data;
+    return { data: resp.data };
   }
 
   /** Make request to the `/products` [endpoint](https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getproducts).*/
-  async products(): Promise<ProductModel[]> {
+  async products(): EndpointResponseType<ProductModel[]> {
     const url = buildUrl(this.setup.url, EndpointConstants.Products);
-    const { data } = await fetchData<ProductModel[]>({
+    const resp = await fetchData<ProductModel[]>({
       url,
       options: noAuthOptions,
     });
 
-    return data;
+    return { data: resp.data };
   }
 
   /** Make request to the `/products/:id` [endpoint](https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getproduct).*/
-  async productId(id: string): Promise<ProductModel> {
+  async productId(id: string): EndpointResponseType<ProductModel> {
     const url = buildUrl(this.setup.url, EndpointConstants.ProductId(id));
-    const { data } = await fetchData<ProductModel>({
+    const resp = await fetchData<ProductModel>({
       url,
       options: noAuthOptions,
     });
 
-    return data;
+    return { data: resp.data };
   }
 
   /** Make request to the `/products/:id/ticker` [endpoint](https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getproductticker).*/
-  async quote(id: string): Promise<QuoteModelExtended> {
+  async quote(id: string): EndpointResponseType<QuoteModelExtended> {
     const url = buildUrl(this.setup.url, EndpointConstants.Quote(id));
     const { data } = await fetchData<QuoteModel>({
       url,
       options: noAuthOptions,
     });
 
-    return extendQuote(data, id, this.setup.currency);
+    return { data: extendQuote(data, id, this.setup.currency) };
   }
 
   /** Make batch request to the `/products/:id/ticker` [endpoint](https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getproductticker).*/
-  quotes(ids: string[]): Promise<QuoteModelExtended[]> {
-    return Promise.all(ids.map((i) => this.quote(i)));
+  async quotes(ids: string[]): EndpointResponseType<QuoteModelExtended[]> {
+    const data = await Promise.all(ids.map((i) => this.quote(i))).then((i) =>
+      i.map((j) => j.data),
+    );
+    return { data };
   }
 
-  async assets(): Promise<any> {
+  async assets(): EndpointResponseType<unknown> {
     const accounts = await this.accounts({ withBalance: true });
-    const ids = accounts.filter((i) =>
-      !Constants.FiatCurrency.includes(i.currency)
-    ).map((a) => `${a.currency}-${this.setup.currency}`);
-    return { accounts, ids };
+    const ids = accounts.data
+      .filter((i) => !Constants.FiatCurrency.includes(i.currency))
+      .map((a) => `${a.currency}-${this.setup.currency}`);
+    return {
+      data: { accounts, ids },
+    };
   }
 }
