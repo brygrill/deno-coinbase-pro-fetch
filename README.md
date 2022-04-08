@@ -14,7 +14,7 @@ You will need:
 - Secret
 - Passphrase
 
-### Add those values to a `.env`
+Add those values to a `.env`
 
 ```env
 APIKEY=""
@@ -32,7 +32,7 @@ const {
 } = config({ safe: true });
 ```
 
-### Init CBFetch
+#### Init CBFetch
 
 ```typescript
 const cb = new CBFetch(
@@ -45,7 +45,7 @@ const cb = new CBFetch(
 );
 ```
 
-### Make a call
+#### Make a call
 
 ```typescript
 // get all accounts
