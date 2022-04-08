@@ -1,9 +1,9 @@
-## Coinbase Pro Fetch
+# Coinbase Pro Fetch
 
 A deno module to format `fetch` requests to the
 [Coinbase Pro API](https://docs.cloud.coinbase.com/exchange/docs/welcome).
 
-### Usage
+## Usage
 
 Make an account and
 [generate an API key](https://docs.cloud.coinbase.com/exchange/docs/authorization-and-authentication).
@@ -14,7 +14,7 @@ You will need:
 - Secret
 - Passphrase
 
-#### Add those values to a `.env`
+### Add those values to a `.env`
 
 ```env
 APIKEY=""
@@ -32,7 +32,7 @@ const {
 } = config({ safe: true });
 ```
 
-#### Init `CBFetch`
+### Init CBFetch
 
 ```typescript
 const cb = new CBFetch(
@@ -45,7 +45,7 @@ const cb = new CBFetch(
 );
 ```
 
-#### Make a call
+### Make a call
 
 ```typescript
 // get all accounts
@@ -53,3 +53,16 @@ const accounts = await cb.endpoints.accounts();
 ```
 
 See `examples` folder for more details.
+
+## Endpoints
+
+| Name          | Usage                             | Coinbase Endpoint |
+| ------------- | --------------------------------- | ----------------- |
+| Accounts      | `cb.endpoints.accounts()`         | `/accounts`       |
+| Account by ID | `cb.endpoints.accountId('12345')` | `/accounts/:id`   |
+
+## Useful Links
+
+- https://docs.cloud.coinbase.com/exchange/docs
+- https://pro.coinbase.com/trade/BTC-USD
+- https://public.sandbox.exchange.coinbase.com/trade/BTC-USD
