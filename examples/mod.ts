@@ -1,5 +1,5 @@
-import { CBFetch, fetchErrUtil } from './deps.ts';
-import { getAccessConfig } from './config.ts';
+import { CBFetch, fetchErrUtil } from "./deps.ts";
+import { getAccessConfig } from "./config.ts";
 
 const env = { sandbox: false };
 const cb = new CBFetch(getAccessConfig(env), env);
@@ -8,9 +8,9 @@ try {
   // collection of endpoints to call
   const promises = [
     cb.endpoints.accounts({ withBalance: true }),
-    cb.endpoints.currencyId('BTC'),
-    cb.endpoints.productId('BTC-USD'),
-    cb.endpoints.quotes(['BTC-USD', 'LINK-USD']),
+    cb.endpoints.currencyId("BTC"),
+    cb.endpoints.productId("BTC-USD"),
+    cb.endpoints.quotes(["BTC-USD", "LINK-USD"]),
     cb.endpoints.assets(),
   ];
 
@@ -21,11 +21,11 @@ try {
 
   // get an account by unique id
   const btcAccount = await cb.endpoints.accountId(
-    accounts.data.find((a) => a.currency === 'BTC')?.id ?? '',
+    accounts.data.find((a) => a.currency === "BTC")?.id ?? "",
   );
 
   // get a quote and catch errors
-  const quote = await cb.endpoints.quote('BTC-USD').catch(fetchErrUtil);
+  const quote = await cb.endpoints.quote("BTC-USD").catch(fetchErrUtil);
 
   // log results
   console.dir({
