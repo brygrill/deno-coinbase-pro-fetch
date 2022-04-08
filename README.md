@@ -1,9 +1,9 @@
-# deno-cb-pro-auth-headers
+## Coinbase Pro Fetch
 
 A deno module to format `fetch` requests to the
 [Coinbase Pro API](https://docs.cloud.coinbase.com/exchange/docs/welcome).
 
-## Usage
+### Usage
 
 Make an account and
 [generate an API key](https://docs.cloud.coinbase.com/exchange/docs/authorization-and-authentication).
@@ -14,74 +14,42 @@ You will need:
 - Secret
 - Passphrase
 
-Import the function
+#### Add those values to a `.env`
 
-```typescript
-export { cbAccessFetchOptions } from "https://raw.githubusercontent.com/brygrill/deno-cb-pro-auth-headers/main/mod.ts";
+```env
+APIKEY=""
+PASSPHRASE=""
+SECRET=""
 ```
 
-Pass in the args for a `GET` request:
+Use the [dotenv](https://deno.land/x/dotenv/mod.ts) module to import:
 
 ```typescript
-const { options, headers } = cbAccessFetchOptions({
-  apiKey: APIKEY,
-  passPhrase: PASSPHRASE,
-  secret: SECRET,
-  method: "GET",
-  requestPath: "/accounts",
-  body: "",
-});
+const {
+  APIKEY,
+  PASSPHRASE,
+  SECRET,
+} = config({ safe: true });
 ```
 
-or a `POST`:
+#### Init `CBFetch`
 
 ```typescript
-const { options, headers } = cbAccessFetchOptions({
-  apiKey: APIKEY,
-  passPhrase: PASSPHRASE,
-  secret: SECRET,
-  method: "POST",
-  requestPath: "/deposits/coinbase-account",
-  body: JSON.stringify({
-    amount: "10",
-    coinbase_account_id: "123",
-    currency: "usd",
-  }),
-});
+const cb = new CBFetch(
+  {
+    apiKey: APIKEY,
+    passPhrase: PASSPHRASE,
+    secret: SECRET,
+  },
+  { sandbox: true }, // optionally set to use sandbox
+);
 ```
 
-The function returns `headers` and `options`.
-
-`headers` will be the required headers described
-[here](https://docs.cloud.coinbase.com/exchange/docs/authorization-and-authentication#creating-a-request).
+#### Make a call
 
 ```typescript
-console.log(headers)
-
-...
-  Accept: "application/json",
-  "Content-Type": "application/json",
-  "cb-access-key": "abc...",
-  "cb-access-passphrase": "def....",
-  "cb-access-sign": "hig...",
-  "cb-access-timestamp": 1636685279.643
-...
+// get all accounts
+const accounts = await cb.endpoints.accounts();
 ```
 
-`options` will be `RequestInit` object for a `fetch` request
-
-```typescript
-console.log(options)
-// GET request
-{
-  method: "GET",
-  headers: ...see above
-}
-
-// POST request
-// TODO
-```
-
-## Options
-
-TODO
+See `examples` folder for more details.
