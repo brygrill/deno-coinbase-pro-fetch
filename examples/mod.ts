@@ -1,45 +1,41 @@
-import { CBFetch, fetchErrUtil } from "./deps.ts";
-import { getAccessConfig } from "./config.ts";
+import { CBFetch, fetchErrUtil } from './deps.ts';
+import { getAccessConfig } from './config.ts';
 
-const env = { sandbox: true };
+const env = { sandbox: false };
 const cb = new CBFetch(getAccessConfig(env), env);
 
-// TODO: promise all settled
 try {
+  // collection of endpoints to call
+  const promises = [
+    cb.endpoints.accounts({ withBalance: true }),
+    cb.endpoints.currencyId('BTC'),
+    cb.endpoints.productId('BTC-USD'),
+    cb.endpoints.quotes(['BTC-USD', 'LINK-USD']),
+    cb.endpoints.assets(),
+  ];
+
+  const calls = Promise.allSettled(promises);
+
+  // get all accounts
   const accounts = await cb.endpoints.accounts();
 
-  const accountsWithBalance = await cb.endpoints.accounts({
-    withBalance: true,
+  // get an account by unique id
+  const btcAccount = await cb.endpoints.accountId(
+    accounts.data.find((a) => a.currency === 'BTC')?.id ?? '',
+  );
+
+  // get a quote and catch errors
+  const quote = await cb.endpoints.quote('BTC-USD').catch(fetchErrUtil);
+
+  // log results
+  console.dir({
+    accounts,
+    btcAccount,
+    quote,
   });
 
-  const btcAccount = await cb.endpoints.accountId(
-    accounts.data.find((a) => a.currency === "BTC")?.id ?? "",
-  );
-
-  const currencies = await cb.endpoints.currencyId("BTC");
-
-  const product = await cb.endpoints.productId("BTC-USD");
-
-  const quote = await cb.endpoints.quote("BTC-USD"); //BTC-USDC will break this
-
-  const quotes = await cb.endpoints.quotes(["BTC-USD", "LINK-USD"]).catch((e) =>
-    fetchErrUtil(e)
-  );
-
-  const assets = await cb.endpoints.assets();
-
-  const data = {
-    accounts,
-    accountsWithBalance,
-    btcAccount,
-    currencies,
-    product,
-    quote,
-    quotes,
-    assets,
-  };
-  console.dir({ data });
-  console.dir({ q: quotes.data });
+  // log settled results
+  calls.then((results) => results.forEach((result) => console.dir({ result })));
 } catch (error) {
   fetchErrUtil(error);
 }

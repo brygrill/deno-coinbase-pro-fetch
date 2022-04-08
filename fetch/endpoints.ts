@@ -150,6 +150,7 @@ export class Endpoints {
     return { data };
   }
 
+  /** Returns `accounts` with a balance and their current value */
   async assets(): EndpointResponseType<unknown> {
     const accounts = await this.accounts({ withBalance: true });
     const ids = accounts.data
