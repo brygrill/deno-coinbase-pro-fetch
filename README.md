@@ -52,7 +52,7 @@ const cb = new CBFetch(
 const accounts = await cb.endpoints.accounts();
 ```
 
-See `examples` folder for more details.
+See [`examples`](examples) folder for more details.
 
 ## Endpoints
 
