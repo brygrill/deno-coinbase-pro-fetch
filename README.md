@@ -35,13 +35,20 @@ const {
 #### Init CBFetch
 
 ```typescript
+// set options if need to override these defaults
+const options: CBFetchOptionsModel = {
+  sandbox: false, // true will use public.sandbox... API
+  currency: "USD", // supported fiat: "USD" | "EUR" | "GBP"
+};
+
+// init
 const cb = new CBFetch(
   {
     apiKey: APIKEY,
     passPhrase: PASSPHRASE,
     secret: SECRET,
   },
-  { sandbox: true }, // optionally set to use sandbox
+  options,
 );
 ```
 
