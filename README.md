@@ -56,10 +56,17 @@ See `examples` folder for more details.
 
 ## Endpoints
 
-| Name          | Usage                             | Coinbase Endpoint |
-| ------------- | --------------------------------- | ----------------- |
-| Accounts      | `cb.endpoints.accounts()`         | `/accounts`       |
-| Account by ID | `cb.endpoints.accountId('12345')` | `/accounts/:id`   |
+| Name           | Usage                                        | Coinbase Endpoint                    |
+| -------------- | -------------------------------------------- | ------------------------------------ |
+| Accounts       | `cb.endpoints.accounts()`                    | `/accounts`                          |
+| Account by ID  | `cb.endpoints.accountId("12345")`            | `/accounts/:id`                      |
+| Currencies     | `cb.endpoints.currency()`                    | `/currencies`                        |
+| Currency by ID | `cb.endpoints.currencyId("BTC")`             | `/currency/:id`                      |
+| Products       | `cb.endpoints.products`                      | `/products`                          |
+| Products by ID | `cb.endpoints.productId("BTC-USD")`          | `/products/:id`                      |
+| Quote          | `cb.endpoints.quote("BTC-USD")`              | `/products/:id/ticker`               |
+| Quotes         | `cb.endpoints.quote(["BTC-USD", "ETH-USD"])` | `/products/:id/ticker`               |
+| Assets         | `cb.endpoints.assets()`                      | `/accounts` + `/products/:id/ticker` |
 
 ## Useful Links
 
