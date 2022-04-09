@@ -1,9 +1,9 @@
-import { CBFetch, fetchErrUtil, CBFetchOptionsModel } from './deps.ts';
-import { getAccessConfig } from './config.ts';
+import { CBFetch, CBFetchOptionsModel, fetchErrUtil } from "./deps.ts";
+import { getAccessConfig } from "./config.ts";
 
 const options: CBFetchOptionsModel = {
   sandbox: false,
-  currency: 'USD'
+  currency: "USD",
 };
 const cb = new CBFetch(getAccessConfig({ sandbox: options.sandbox }), options);
 
@@ -13,9 +13,9 @@ const callAllEndpoints = async () => {
     // collection of endpoints to call
     const promises = [
       cb.endpoints.accounts({ withBalance: true }),
-      cb.endpoints.currencyId('BTC'),
-      cb.endpoints.productId('BTC-USD'),
-      cb.endpoints.quotes(['BTC-USD', 'LINK-USD']),
+      cb.endpoints.currencyId("BTC"),
+      cb.endpoints.productId("BTC-USD"),
+      cb.endpoints.quotes(["BTC-USD", "LINK-USD"]),
       cb.endpoints.assets(),
     ];
 
@@ -26,11 +26,11 @@ const callAllEndpoints = async () => {
 
     // get an account by unique id
     const btcAccount = await cb.endpoints.accountId(
-      accounts.data.find((a) => a.currency === 'BTC')?.id ?? '',
+      accounts.data.find((a) => a.currency === "BTC")?.id ?? "",
     );
 
     // get a quote and catch errors
-    const quote = await cb.endpoints.quote('BTC-USD').catch(fetchErrUtil);
+    const quote = await cb.endpoints.quote("BTC-USD").catch(fetchErrUtil);
 
     // log results
     console.dir({
@@ -41,7 +41,7 @@ const callAllEndpoints = async () => {
 
     // log settled results
     calls.then((results) =>
-      results.forEach((result) => console.dir({ result })),
+      results.forEach((result) => console.dir({ result }))
     );
   } catch (error) {
     fetchErrUtil(error);
@@ -59,12 +59,12 @@ const callAssets = async () => {
 };
 
 /** Exec all the endpoint calls for a collection */
-const main = (collection: 'all' | 'assets' = 'all') => {
+const main = (collection: "all" | "assets" = "all") => {
   switch (collection) {
-    case 'all':
+    case "all":
       callAllEndpoints();
       return;
-    case 'assets':
+    case "assets":
       callAssets();
       return;
     default:
@@ -73,4 +73,4 @@ const main = (collection: 'all' | 'assets' = 'all') => {
 };
 
 // run it
-main('assets');
+main("assets");

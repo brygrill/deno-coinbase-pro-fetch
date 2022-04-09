@@ -35,6 +35,7 @@ interface FetchErrUtilRespModel {
   };
   detailsString?: string;
 }
+
 /** utility function to format error response to an object */
 export const fetchErrUtil = (
   error: Error,
