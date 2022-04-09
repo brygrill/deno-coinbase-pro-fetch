@@ -1,6 +1,6 @@
 import { fetchOptions, noAuthOptions } from "./fetch_options.ts";
 import { fetchData } from "./fetch.ts";
-import { extendAccount, extendQuote } from "../utils/utils.ts";
+import { buildAssets, extendAccount, extendQuote } from "../utils/utils.ts";
 import { Constants, EndpointConstants } from "../constants.ts";
 import type {
   CBEndpointsSetupModel,
@@ -10,6 +10,7 @@ import type {
 import type {
   AccountModel,
   AccountModelExtended,
+  AssetModel,
   CurrencyModel,
   ProductModel,
   QuoteModel,
@@ -150,14 +151,20 @@ export class Endpoints {
     return { data };
   }
 
-  /** Returns `accounts` with a balance and their current value */
-  async assets(): EndpointResponseType<unknown> {
+  /** Returns `accounts` for a portfolio with a balance and their current value */
+  async assets(): EndpointResponseType<AssetModel> {
     const accounts = await this.accounts({ withBalance: true });
     const ids = accounts.data
       .filter((i) => !Constants.FiatCurrency.includes(i.currency))
       .map((a) => `${a.currency}-${this.setup.currency}`);
+    const quotes = await this.quotes(ids);
     return {
-      data: { accounts, ids }, // TODO: add more data
+      data: buildAssets({
+        accounts: accounts.data,
+        quotes: quotes.data,
+        ids,
+        currency: this.setup.currency,
+      }),
     };
   }
 }

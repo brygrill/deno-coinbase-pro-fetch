@@ -2,7 +2,7 @@ import { CBFetch, CBFetchOptionsModel, fetchErrUtil } from "./deps.ts";
 import { getAccessConfig } from "./config.ts";
 
 const options: CBFetchOptionsModel = {
-  sandbox: false,
+  sandbox: true,
   currency: "USD",
 };
 const cb = new CBFetch(getAccessConfig({ sandbox: options.sandbox }), options);
@@ -52,7 +52,8 @@ const callAllEndpoints = async () => {
 const callAssets = async () => {
   try {
     const assets = await cb.endpoints.assets();
-    console.dir(assets);
+    console.dir({ data: assets.data.accounts });
+    console.dir({ data: assets.data });
   } catch (error) {
     fetchErrUtil(error);
   }

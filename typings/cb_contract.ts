@@ -87,3 +87,14 @@ export interface QuoteModelExtended extends QuoteModel {
     volume: number;
   };
 }
+
+export interface AssetModel {
+  totalBalance: number;
+  totalBalanceFormatted: string;
+  balanceByCoin: {
+    coin: string;
+    balance: number;
+    balanceFormatted: string;
+  }[];
+  accounts: AccountModelExtended[];
+}
