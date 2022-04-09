@@ -1,4 +1,4 @@
-import { decode, hmac } from "../deps.ts";
+import { accessHeaders } from "./access_headers.ts";
 import type {
   ContentType,
   FetchOptionsParamsType,
@@ -25,17 +25,19 @@ export function fetchOptions({
   body,
 }: FetchOptionsParamsType): FetchOptionsRespModel {
   const timeStamp = Date.now() / 1000;
-  const key = decode(secret);
   const msg = `${timeStamp}${method}${requestPath}${body}`;
-  const sign = hmac("sha256", key, msg, "utf8", "base64") as string;
 
-  // TODO break this out into a function
+  const cbAccess = accessHeaders({
+    apiKey,
+    passPhrase,
+    secret,
+    timeStamp,
+    msg,
+  });
+
   const headers = {
     ...baseHeaders,
-    "cb-access-key": apiKey,
-    "cb-access-passphrase": passPhrase,
-    "cb-access-sign": sign,
-    "cb-access-timestamp": timeStamp,
+    ...cbAccess,
   };
 
   const options = {
