@@ -1,18 +1,18 @@
-import { fetchOptions } from "./fetch/fetch_options.ts";
-import { fetchData } from "./fetch/fetch.ts";
-import { Endpoints } from "./fetch/endpoints.ts";
-import { Constants } from "./constants.ts";
+import { fetchOptions } from './fetch/fetch_options.ts';
+import { fetchData } from './fetch/fetch.ts';
+import { Endpoints } from './fetch/endpoints.ts';
+import { Constants } from './constants.ts';
 import type {
   CBAccessSetupModel,
   CBFetchOptionsModel,
   RequestParamsModel,
-} from "./typings/types.ts";
-export * from "./fetch/fetch_err.ts";
-export * from "./typings/types.ts";
+} from './typings/types.ts';
+export * from './fetch/fetch_err.ts';
+export * from './typings/types.ts';
 
 const defaultOptions: CBFetchOptionsModel = {
   sandbox: false,
-  currency: "USD",
+  currency: Constants.DefaultCurrency,
 };
 
 /** Make requests to the Coinbase Pro API. Setup with [APIKey, Passphrase, and Secret](https://docs.cloud.coinbase.com/exchange/docs/authorization-and-authentication). */
@@ -26,13 +26,14 @@ export class CBFetch {
 
   constructor(setup: CBAccessSetupModel, options = defaultOptions) {
     const baseURL = options.sandbox ? Constants.SandboxUrl : Constants.BaseUrl;
+    const currency = options.currency ?? defaultOptions.currency;
     this.setup = setup;
     this.options = options;
     this.url = baseURL;
     this.endpoints = new Endpoints({
       ...setup,
       url: baseURL,
-      currency: options.currency,
+      currency,
     });
   }
 

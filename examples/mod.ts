@@ -1,8 +1,11 @@
-import { CBFetch, fetchErrUtil } from './deps.ts';
+import { CBFetch, fetchErrUtil, CBFetchOptionsModel } from './deps.ts';
 import { getAccessConfig } from './config.ts';
 
-const env = { sandbox: false };
-const cb = new CBFetch(getAccessConfig(env), env);
+const options: CBFetchOptionsModel = {
+  sandbox: false,
+  currency: 'USD'
+};
+const cb = new CBFetch(getAccessConfig({ sandbox: options.sandbox }), options);
 
 /** Call all endpoints and log the results */
 const callAllEndpoints = async () => {
@@ -56,7 +59,7 @@ const callAssets = async () => {
 };
 
 /** Exec all the endpoint calls for a collection */
-const main = (collection: 'all' | 'assets' = "all") => {
+const main = (collection: 'all' | 'assets' = 'all') => {
   switch (collection) {
     case 'all':
       callAllEndpoints();
@@ -70,4 +73,4 @@ const main = (collection: 'all' | 'assets' = "all") => {
 };
 
 // run it
-main("assets");
+main('assets');
