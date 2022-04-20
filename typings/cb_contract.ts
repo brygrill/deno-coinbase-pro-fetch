@@ -100,6 +100,8 @@ export interface AssetModel {
     coin: string;
     balance: number;
     balanceFormatted: string;
+    weight: number;
+    weightFormatted: string;
   }[];
   accounts: AccountModelExtended[];
 }
