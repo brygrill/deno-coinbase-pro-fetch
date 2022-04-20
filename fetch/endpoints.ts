@@ -1,6 +1,6 @@
 import { fetchOptions, noAuthOptions } from "./fetch_options.ts";
 import { fetchData } from "./fetch.ts";
-import { buildAssets, extendAccount, extendQuote } from "../utils/utils.ts";
+import { calcAssets, extendAccount, extendQuote } from "../utils/utils.ts";
 import { Constants, EndpointConstants } from "../constants.ts";
 import type {
   CBEndpointsSetupModel,
@@ -159,7 +159,7 @@ export class Endpoints {
       .map((a) => `${a.currency}-${this.setup.currency}`);
     const quotes = await this.quotes(ids);
     return {
-      data: buildAssets({
+      data: calcAssets({
         accounts: accounts.data,
         quotes: quotes.data,
         ids,

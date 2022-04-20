@@ -42,7 +42,7 @@ export function extendQuote(
   };
 }
 
-export interface BuildAssetsParamsModel {
+export interface CalculateAssetsParamsModel {
   accounts: AccountModelExtended[];
   ids: string[];
   quotes: QuoteModelExtended[];
@@ -50,12 +50,13 @@ export interface BuildAssetsParamsModel {
 }
 
 /** Calculate and format asset values for a given portfolio  */
-export const buildAssets = ({
+export const calcAssets = ({
   accounts,
   ids,
   quotes,
   currency = Constants.DefaultCurrency,
-}: BuildAssetsParamsModel): AssetModel => {
+}: CalculateAssetsParamsModel): AssetModel => {
+  console.dir({accounts, ids, quotes})
   return {
     totalBalance: 0,
     totalBalanceFormatted: formatCurrency(0, currency),
