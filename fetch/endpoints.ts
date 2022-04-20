@@ -15,6 +15,7 @@ import type {
   ProductModel,
   QuoteModel,
   QuoteModelExtended,
+  QuotesModel,
 } from "../typings/cb_contract.ts";
 
 interface BuildFetchRequestOptions {
@@ -144,10 +145,29 @@ export class Endpoints {
   }
 
   /** Make batch request to the `/products/:id/ticker` [endpoint](https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getproductticker).*/
-  async quotes(ids: string[]): EndpointResponseType<QuoteModelExtended[]> {
-    const data = await Promise.all(ids.map((i) => this.quote(i))).then((i) =>
-      i.map((j) => j.data)
-    );
+  async quotes(
+    ids: string[],
+    { successOnly } = { successOnly: false },
+  ): EndpointResponseType<QuotesModel[]> {
+    const quoteData = await Promise.allSettled(
+      ids.map((i) => this.quote(i)),
+    ).then((results) => {
+      return results.map((r) => {
+        if (r.status === "fulfilled") {
+          return {
+            data: r.value.data,
+            error: null,
+          };
+        }
+        return {
+          data: null,
+          error: new Error(r.reason),
+        };
+      });
+    });
+
+    const data = successOnly ? quoteData.filter((i) => i.data) : quoteData;
+
     return { data };
   }
 
@@ -157,11 +177,11 @@ export class Endpoints {
     const ids = accounts.data
       .filter((i) => !Constants.FiatCurrency.includes(i.currency))
       .map((a) => `${a.currency}-${this.setup.currency}`);
-    const quotes = await this.quotes(ids);
+    const { data: quotes } = await this.quotes(ids, { successOnly: true });
     return {
       data: calcAssets({
         accounts: accounts.data,
-        quotes: quotes.data,
+        quotes,
         ids,
         currency: this.setup.currency,
       }),

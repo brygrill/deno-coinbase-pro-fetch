@@ -1,13 +1,14 @@
-import { formatCurrency } from "./format.ts";
-import { Constants } from "../constants.ts";
+import { formatCurrency } from './format.ts';
+import { Constants } from '../constants.ts';
 import type {
   AccountModel,
   AccountModelExtended,
   AssetModel,
   QuoteModel,
   QuoteModelExtended,
-} from "../typings/cb_contract.ts";
-import type { CurrencyOptionsType } from "../typings/types.ts";
+  QuotesModel,
+} from '../typings/cb_contract.ts';
+import type { CurrencyOptionsType } from '../typings/types.ts';
 
 export function extendAccount(item: AccountModel): AccountModelExtended {
   return {
@@ -30,7 +31,7 @@ export function extendQuote(
   return {
     ...item,
     pair: id,
-    crypto: id.split("-")[0] || null, // id should be formatted like BTC-USD
+    crypto: id.split('-')[0] || null, // id should be formatted like BTC-USD
     priceFormatted: formatCurrency(priceNum, currency),
     extended: {
       price: priceNum,
@@ -45,7 +46,7 @@ export function extendQuote(
 export interface CalculateAssetsParamsModel {
   accounts: AccountModelExtended[];
   ids: string[];
-  quotes: QuoteModelExtended[];
+  quotes: QuotesModel[];
   currency?: CurrencyOptionsType;
 }
 
@@ -56,7 +57,7 @@ export const calcAssets = ({
   quotes,
   currency = Constants.DefaultCurrency,
 }: CalculateAssetsParamsModel): AssetModel => {
-  console.dir({accounts, ids, quotes})
+  console.dir({ accounts, ids, quotes });
   return {
     totalBalance: 0,
     totalBalanceFormatted: formatCurrency(0, currency),

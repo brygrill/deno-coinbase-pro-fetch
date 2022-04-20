@@ -88,6 +88,11 @@ export interface QuoteModelExtended extends QuoteModel {
   };
 }
 
+export interface QuotesModel {
+  data: QuoteModelExtended | null;
+  error: Error | null;
+}
+
 export interface AssetModel {
   totalBalance: number;
   totalBalanceFormatted: string;
