@@ -1,41 +1,76 @@
-import { CBFetch, config, FetchError } from "./deps.ts";
-const { APIKEY, PASSPHRASE, SECRET } = config({ safe: true });
+import { CBFetch, CBFetchOptionsModel, fetchErrUtil } from "./deps.ts";
+import { getAccessConfig } from "./config.ts";
 
-const cb = new CBFetch(
-  {
-    apiKey: APIKEY,
-    passPhrase: PASSPHRASE,
-    secret: SECRET,
-  },
-);
+const options: CBFetchOptionsModel = {
+  sandbox: true,
+  currency: "USD",
+};
+const cb = new CBFetch(getAccessConfig({ sandbox: options.sandbox }), options);
 
-try {
-  const accounts = await cb.endpoints.accounts();
-  const withBalance = accounts.filter((i) => Number(i.balance) > 0);
+/** Call all endpoints and log the results */
+const callAllEndpoints = async () => {
+  try {
+    // collection of endpoints to call
+    const promises = [
+      cb.endpoints.accounts({ withBalance: true }),
+      cb.endpoints.currencyId("BTC"),
+      cb.endpoints.productId("BTC-USD"),
+      cb.endpoints.quotes(["BTC-USD", "LINK-USD"]),
+      cb.endpoints.assets(),
+    ];
 
-  const btcAccount = await cb.endpoints.accountId(
-    "ca632e25-25f0-4c8f-a535-99f4a7eab324",
-  );
+    const calls = Promise.allSettled(promises);
 
-  const currencies = await cb.endpoints.currencyId("BTC");
+    // get all accounts
+    const accounts = await cb.endpoints.accounts();
 
-  const product = await cb.endpoints.productId("BTC-USD");
+    // get an account by unique id
+    const btcAccount = await cb.endpoints.accountId(
+      accounts.data.find((a) => a.currency === "BTC")?.id ?? "",
+    );
 
-  const quote = await cb.endpoints.quote("BTC-USDC");
+    // get a quote and catch errors
+    const quote = await cb.endpoints.quote("BTC-USD").catch(fetchErrUtil);
 
-  const quotes = await cb.endpoints.quotes(["BTC-USD", "ETH-USD"]);
+    // log results
+    console.dir({
+      accounts,
+      btcAccount,
+      quote,
+    });
 
-  const assets = await cb.endpoints.assets();
-
-  // console.log(withBalance);
-  // console.log(btcAccount);
-  // console.log(currencies.details.symbol);
-  // console.log(product.id);
-  // console.log(quote);
-  // console.log(quotes);
-  console.log(assets);
-} catch (error) {
-  if (error instanceof FetchError) {
-    console.log(error.toJSON());
+    // log settled results
+    calls.then((results) =>
+      results.forEach((result) => console.dir({ result }))
+    );
+  } catch (error) {
+    fetchErrUtil(error);
   }
-}
+};
+
+/** Call assets endpoint and work with results */
+const callAssets = async () => {
+  try {
+    const { data } = await cb.endpoints.assets();
+    console.dir({ data });
+  } catch (error) {
+    fetchErrUtil(error);
+  }
+};
+
+/** Exec all the endpoint calls for a collection */
+const main = (collection: "all" | "assets" = "all") => {
+  switch (collection) {
+    case "all":
+      callAllEndpoints();
+      return;
+    case "assets":
+      callAssets();
+      return;
+    default:
+      break;
+  }
+};
+
+// run it
+main("assets");

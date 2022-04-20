@@ -1,4 +1,4 @@
-# deno-cb-pro-auth-headers
+# Coinbase Pro Fetch
 
 A deno module to format `fetch` requests to the
 [Coinbase Pro API](https://docs.cloud.coinbase.com/exchange/docs/welcome).
@@ -14,74 +14,69 @@ You will need:
 - Secret
 - Passphrase
 
-Import the function
+Add those values to a `.env`
 
-```typescript
-export { cbAccessFetchOptions } from "https://raw.githubusercontent.com/brygrill/deno-cb-pro-auth-headers/main/mod.ts";
+```env
+APIKEY=""
+PASSPHRASE=""
+SECRET=""
 ```
 
-Pass in the args for a `GET` request:
+Use the [dotenv](https://deno.land/x/dotenv/mod.ts) module to import:
 
 ```typescript
-const { options, headers } = cbAccessFetchOptions({
-  apiKey: APIKEY,
-  passPhrase: PASSPHRASE,
-  secret: SECRET,
-  method: "GET",
-  requestPath: "/accounts",
-  body: "",
-});
+const {
+  APIKEY,
+  PASSPHRASE,
+  SECRET,
+} = config({ safe: true });
 ```
 
-or a `POST`:
+#### Init CBFetch
 
 ```typescript
-const { options, headers } = cbAccessFetchOptions({
-  apiKey: APIKEY,
-  passPhrase: PASSPHRASE,
-  secret: SECRET,
-  method: "POST",
-  requestPath: "/deposits/coinbase-account",
-  body: JSON.stringify({
-    amount: "10",
-    coinbase_account_id: "123",
-    currency: "usd",
-  }),
-});
+// set options if need to override these defaults
+const options: CBFetchOptionsModel = {
+  sandbox: false, // true will use public.sandbox... API
+  currency: "USD", // supported fiat: "USD" | "EUR" | "GBP"
+};
+
+// init
+const cb = new CBFetch(
+  {
+    apiKey: APIKEY,
+    passPhrase: PASSPHRASE,
+    secret: SECRET,
+  },
+  options,
+);
 ```
 
-The function returns `headers` and `options`.
-
-`headers` will be the required headers described
-[here](https://docs.cloud.coinbase.com/exchange/docs/authorization-and-authentication#creating-a-request).
+#### Make a call
 
 ```typescript
-console.log(headers)
-
-...
-  Accept: "application/json",
-  "Content-Type": "application/json",
-  "cb-access-key": "abc...",
-  "cb-access-passphrase": "def....",
-  "cb-access-sign": "hig...",
-  "cb-access-timestamp": 1636685279.643
-...
+// get all accounts
+const accounts = await cb.endpoints.accounts();
 ```
 
-`options` will be `RequestInit` object for a `fetch` request
+See [`examples`](examples) folder for more details.
 
-```typescript
-console.log(options)
-// GET request
-{
-  method: "GET",
-  headers: ...see above
-}
+## Endpoints
 
-// POST request
-// TODO
-```
+| Name           | Usage                                        | Coinbase Endpoint                    |
+| -------------- | -------------------------------------------- | ------------------------------------ |
+| Accounts       | `cb.endpoints.accounts()`                    | `/accounts`                          |
+| Account by ID  | `cb.endpoints.accountId("12345")`            | `/accounts/:id`                      |
+| Currencies     | `cb.endpoints.currency()`                    | `/currencies`                        |
+| Currency by ID | `cb.endpoints.currencyId("BTC")`             | `/currency/:id`                      |
+| Products       | `cb.endpoints.products`                      | `/products`                          |
+| Products by ID | `cb.endpoints.productId("BTC-USD")`          | `/products/:id`                      |
+| Quote          | `cb.endpoints.quote("BTC-USD")`              | `/products/:id/ticker`               |
+| Quotes         | `cb.endpoints.quote(["BTC-USD", "ETH-USD"])` | `/products/:id/ticker`               |
+| Assets         | `cb.endpoints.assets()`                      | `/accounts` + `/products/:id/ticker` |
 
-## Options
+## Useful Links
 
-TODO
+- https://docs.cloud.coinbase.com/exchange/docs
+- https://pro.coinbase.com/trade/BTC-USD
+- https://public.sandbox.exchange.coinbase.com/trade/BTC-USD

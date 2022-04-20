@@ -1,11 +1,14 @@
+import { formatCurrency } from "./format.ts";
 import { Constants } from "../constants.ts";
-import {
+import type {
   AccountModel,
   AccountModelExtended,
+  AssetModel,
   QuoteModel,
   QuoteModelExtended,
+  QuotesModel,
 } from "../typings/cb_contract.ts";
-import { formatCurrency } from "./format.ts";
+import type { CurrencyOptionsType } from "../typings/types.ts";
 
 export function extendAccount(item: AccountModel): AccountModelExtended {
   return {
@@ -39,3 +42,26 @@ export function extendQuote(
     },
   };
 }
+
+export interface CalculateAssetsParamsModel {
+  accounts: AccountModelExtended[];
+  ids: string[];
+  quotes: QuotesModel[];
+  currency?: CurrencyOptionsType;
+}
+
+/** Calculate and format asset values for a given portfolio  */
+export const calcAssets = ({
+  accounts,
+  ids,
+  quotes,
+  currency = Constants.DefaultCurrency,
+}: CalculateAssetsParamsModel): AssetModel => {
+  console.dir({ accounts, ids, quotes });
+  return {
+    totalBalance: 0,
+    totalBalanceFormatted: formatCurrency(0, currency),
+    balanceByCoin: [],
+    accounts,
+  };
+};

@@ -1,59 +1,68 @@
-export interface CBAccessSetup {
+export interface CBAccessSetupModel {
   apiKey: string;
   passPhrase: string;
   secret: string;
 }
 
 export type MethodType = "GET" | "POST";
-export interface RequestParams {
+
+export interface RequestParamsModel {
   method: MethodType;
   requestPath: string;
   body: string;
 }
 
-export type FetchOptionsParams = CBAccessSetup & RequestParams;
+export type FetchOptionsParamsType = CBAccessSetupModel & RequestParamsModel;
 
 export type ContentType = "application/json";
 
 export type CurrencyOptionsType = "USD" | "EUR" | "GBP";
 
-export type CBAccessHeadersResp = {
-  Accept: ContentType;
-  "Content-Type": ContentType;
+export interface CBAccessHeaderModel {
   "cb-access-key": string; // the API key
   "cb-access-passphrase": string; // phasephrase when API registered
   "cb-access-sign": string; // hmac sign
   "cb-access-timestamp": number; // timestamp
-};
+}
+export interface CBAccessHeadersRespModel extends CBAccessHeaderModel {
+  Accept: ContentType;
+  "Content-Type": ContentType;
+}
 
-export type FetchOptionsResp = {
-  headers: CBAccessHeadersResp;
+export type FetchOptionsRespModel = {
+  headers: CBAccessHeadersRespModel;
   options: RequestInit;
 };
 
-export interface CBFetchOptions {
+export interface CBFetchOptionsModel {
   sandbox?: boolean;
   currency?: CurrencyOptionsType;
 }
 
-export interface FetchParams {
+export interface FetchParamsModel {
   url: string;
   options: RequestInit;
 }
 
-export interface FetchResp<T> {
+export interface FetchRespModel<T> {
   data: T;
   status: number;
   type: ResponseType;
 }
 
-export interface InitFetchError {
+export interface InitFetchErrorModel {
   status: number;
   message: string;
   url: string;
 }
 
-export interface CBAEndpointsSetup extends CBAccessSetup {
+export interface CBEndpointsSetupModel extends CBAccessSetupModel {
   url: string;
   currency?: CurrencyOptionsType;
 }
+
+export interface EndpointResponseModel<TData> {
+  data: TData;
+}
+
+export type EndpointResponseType<TData> = Promise<EndpointResponseModel<TData>>;
