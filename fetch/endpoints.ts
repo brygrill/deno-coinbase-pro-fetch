@@ -1,6 +1,7 @@
 import { fetchOptions, noAuthOptions } from './fetch_options.ts';
 import { fetchData } from './fetch.ts';
-import { calcAssets, extendAccount, extendQuote } from '../utils/utils.ts';
+import { extendAccount, extendQuote } from '../utils/utils.ts';
+import { calcAssets } from '../utils/calc_assets.ts';
 import { Constants, EndpointConstants } from '../constants.ts';
 import type {
   CBEndpointsSetupModel,

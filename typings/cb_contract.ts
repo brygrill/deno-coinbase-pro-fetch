@@ -95,7 +95,7 @@ export interface QuotesModel {
 
 export interface AccountQuoteModel extends AccountModelExtended {
   quote?: QuoteModelExtended;
-  value?: number
+  value: number
 }
 
 export interface AssetModel {
