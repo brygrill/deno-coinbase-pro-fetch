@@ -2,7 +2,7 @@ import { CBFetch, CBFetchOptionsModel, fetchErrUtil } from "./deps.ts";
 import { getAccessConfig } from "./config.ts";
 
 const options: CBFetchOptionsModel = {
-  sandbox: true,
+  sandbox: false,
   currency: "USD",
 };
 const cb = new CBFetch(getAccessConfig({ sandbox: options.sandbox }), options);
