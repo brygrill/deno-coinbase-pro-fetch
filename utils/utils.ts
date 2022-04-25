@@ -1,11 +1,11 @@
-import { formatCurrency } from './format.ts';
-import { Constants } from '../constants.ts';
+import { formatCurrency } from "./format.ts";
+import { Constants } from "../constants.ts";
 import type {
   AccountModel,
   AccountModelExtended,
   QuoteModel,
   QuoteModelExtended,
-} from '../typings/cb_contract.ts';
+} from "../typings/cb_contract.ts";
 
 export function extendAccount(item: AccountModel): AccountModelExtended {
   return {
@@ -28,7 +28,7 @@ export function extendQuote(
   return {
     ...item,
     pair: id,
-    crypto: id.split('-')[0] || null, // id should be formatted like BTC-USD
+    crypto: id.split("-")[0] || null, // id should be formatted like BTC-USD
     priceFormatted: formatCurrency(priceNum, currency),
     extended: {
       price: priceNum,
@@ -39,6 +39,3 @@ export function extendQuote(
     },
   };
 }
-
-
-

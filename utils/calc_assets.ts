@@ -1,12 +1,12 @@
-import { formatCurrency } from './format.ts';
-import { Constants } from '../constants.ts';
+import { formatCurrency } from "./format.ts";
+import { Constants } from "../constants.ts";
 import type {
   AccountModelExtended,
+  AccountQuoteModel,
   AssetModel,
   QuoteModelExtended,
-  AccountQuoteModel,
-} from '../typings/cb_contract.ts';
-import type { CurrencyOptionsType } from '../typings/types.ts';
+} from "../typings/cb_contract.ts";
+import type { CurrencyOptionsType } from "../typings/types.ts";
 
 /** For a given set of accounts with values, sum their total as number and currency */
 const calcTotal = (
@@ -20,7 +20,6 @@ const calcTotal = (
   };
 };
 
-//TODO: add a test for this function
 /** For a given set of accounts and quotes. Calculate their fiat value */
 const calcAssetValue = (
   accounts: AccountModelExtended[],

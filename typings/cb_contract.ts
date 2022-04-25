@@ -89,13 +89,13 @@ export interface QuoteModelExtended extends QuoteModel {
 }
 
 export interface QuotesModel {
-  quotes: QuoteModelExtended[]
-  errors: Record<string, Error>
+  quotes: QuoteModelExtended[];
+  errors: Record<string, Error>;
 }
 
 export interface AccountQuoteModel extends AccountModelExtended {
   quote?: QuoteModelExtended;
-  value: number
+  value: number;
 }
 
 export interface AssetModel {

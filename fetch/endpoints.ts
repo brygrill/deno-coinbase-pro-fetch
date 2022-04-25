@@ -1,13 +1,13 @@
-import { fetchOptions, noAuthOptions } from './fetch_options.ts';
-import { fetchData } from './fetch.ts';
-import { extendAccount, extendQuote } from '../utils/utils.ts';
-import { calcAssets } from '../utils/calc_assets.ts';
-import { Constants, EndpointConstants } from '../constants.ts';
+import { fetchOptions, noAuthOptions } from "./fetch_options.ts";
+import { fetchData } from "./fetch.ts";
+import { extendAccount, extendQuote } from "../utils/utils.ts";
+import { calcAssets } from "../utils/calc_assets.ts";
+import { Constants, EndpointConstants } from "../constants.ts";
 import type {
   CBEndpointsSetupModel,
   EndpointResponseType,
   MethodType,
-} from '../typings/types.ts';
+} from "../typings/types.ts";
 import type {
   AccountModel,
   AccountModelExtended,
@@ -17,7 +17,7 @@ import type {
   QuoteModel,
   QuoteModelExtended,
   QuotesModel,
-} from '../typings/cb_contract.ts';
+} from "../typings/cb_contract.ts";
 
 interface BuildFetchRequestOptions {
   endpoint: string;
@@ -31,7 +31,7 @@ function buildUrl(baseUrl: string, endpoint: string) {
 
 function buildFetchRequest(
   setup: CBEndpointsSetupModel,
-  { endpoint, method = 'GET', body = '' }: BuildFetchRequestOptions,
+  { endpoint, method = "GET", body = "" }: BuildFetchRequestOptions,
 ) {
   const { url: baseUrl, ...rest } = setup;
   const url = buildUrl(baseUrl, endpoint);
@@ -151,7 +151,7 @@ export class Endpoints {
     const errors: Record<string, Error> = {};
     await Promise.allSettled(ids.map((i) => this.quote(i))).then((results) => {
       results.forEach((r, x) => {
-        if (r.status === 'fulfilled') {
+        if (r.status === "fulfilled") {
           quotes.push(r.value.data);
         } else {
           errors[ids[x]] = r.reason;
