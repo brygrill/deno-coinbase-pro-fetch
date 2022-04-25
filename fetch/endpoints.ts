@@ -1,12 +1,12 @@
-import { fetchOptions, noAuthOptions } from "./fetch_options.ts";
-import { fetchData } from "./fetch.ts";
-import { calcAssets, extendAccount, extendQuote } from "../utils/utils.ts";
-import { Constants, EndpointConstants } from "../constants.ts";
+import { fetchOptions, noAuthOptions } from './fetch_options.ts';
+import { fetchData } from './fetch.ts';
+import { calcAssets, extendAccount, extendQuote } from '../utils/utils.ts';
+import { Constants, EndpointConstants } from '../constants.ts';
 import type {
   CBEndpointsSetupModel,
   EndpointResponseType,
   MethodType,
-} from "../typings/types.ts";
+} from '../typings/types.ts';
 import type {
   AccountModel,
   AccountModelExtended,
@@ -16,7 +16,7 @@ import type {
   QuoteModel,
   QuoteModelExtended,
   QuotesModel,
-} from "../typings/cb_contract.ts";
+} from '../typings/cb_contract.ts';
 
 interface BuildFetchRequestOptions {
   endpoint: string;
@@ -30,7 +30,7 @@ function buildUrl(baseUrl: string, endpoint: string) {
 
 function buildFetchRequest(
   setup: CBEndpointsSetupModel,
-  { endpoint, method = "GET", body = "" }: BuildFetchRequestOptions,
+  { endpoint, method = 'GET', body = '' }: BuildFetchRequestOptions,
 ) {
   const { url: baseUrl, ...rest } = setup;
   const url = buildUrl(baseUrl, endpoint);
@@ -145,30 +145,20 @@ export class Endpoints {
   }
 
   /** Make batch request to the `/products/:id/ticker` [endpoint](https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getproductticker).*/
-  async quotes(
-    ids: string[],
-    { successOnly } = { successOnly: false },
-  ): EndpointResponseType<QuotesModel[]> {
-    const quoteData = await Promise.allSettled(
-      ids.map((i) => this.quote(i)),
-    ).then((results) => {
-      return results.map((r) => {
-        if (r.status === "fulfilled") {
-          return {
-            data: r.value.data,
-            error: null,
-          };
+  async quotes(ids: string[]): EndpointResponseType<QuotesModel> {
+    const quotes: QuoteModelExtended[] = [];
+    const errors: Record<string, Error> = {};
+    await Promise.allSettled(ids.map((i) => this.quote(i))).then((results) => {
+      results.forEach((r, x) => {
+        if (r.status === 'fulfilled') {
+          quotes.push(r.value.data);
+        } else {
+          errors[ids[x]] = r.reason;
         }
-        return {
-          data: null,
-          error: new Error(r.reason),
-        };
       });
     });
 
-    const data = successOnly ? quoteData.filter((i) => i.data) : quoteData;
-
-    return { data };
+    return { data: { quotes, errors } };
   }
 
   /** Returns `accounts` for a portfolio with a balance and their current value */
@@ -177,11 +167,11 @@ export class Endpoints {
     const ids = accounts.data
       .filter((i) => !Constants.FiatCurrency.includes(i.currency))
       .map((a) => `${a.currency}-${this.setup.currency}`);
-    const { data: quotes } = await this.quotes(ids, { successOnly: true });
+    const { data: quoteData } = await this.quotes(ids);
     return {
       data: calcAssets({
         accounts: accounts.data,
-        quotes,
+        quotes: quoteData.quotes,
         ids,
         currency: this.setup.currency,
       }),

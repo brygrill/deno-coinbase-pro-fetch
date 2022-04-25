@@ -1,14 +1,14 @@
-import { formatCurrency } from "./format.ts";
-import { Constants } from "../constants.ts";
+import { formatCurrency } from './format.ts';
+import { Constants } from '../constants.ts';
 import type {
   AccountModel,
   AccountModelExtended,
   AssetModel,
   QuoteModel,
   QuoteModelExtended,
-  QuotesModel,
-} from "../typings/cb_contract.ts";
-import type { CurrencyOptionsType } from "../typings/types.ts";
+  AccountQuoteModel,
+} from '../typings/cb_contract.ts';
+import type { CurrencyOptionsType } from '../typings/types.ts';
 
 export function extendAccount(item: AccountModel): AccountModelExtended {
   return {
@@ -31,7 +31,7 @@ export function extendQuote(
   return {
     ...item,
     pair: id,
-    crypto: id.split("-")[0] || null, // id should be formatted like BTC-USD
+    crypto: id.split('-')[0] || null, // id should be formatted like BTC-USD
     priceFormatted: formatCurrency(priceNum, currency),
     extended: {
       price: priceNum,
@@ -46,9 +46,24 @@ export function extendQuote(
 export interface CalculateAssetsParamsModel {
   accounts: AccountModelExtended[];
   ids: string[];
-  quotes: QuotesModel[];
+  quotes: QuoteModelExtended[];
   currency?: CurrencyOptionsType;
 }
+
+const calcAssetValue = (
+  accounts: AccountModelExtended[],
+  quotes: QuoteModelExtended[],
+): AccountQuoteModel[] => {
+  return accounts.map((a) => {
+    const quote = quotes.find((q) => q.crypto === a.currency);
+    const value = quote ? quote.extended.price * a.extended.balance : a.extended.balance;
+    return {
+      ...a,
+      value,
+      quote,
+    };
+  });
+};
 
 /** Calculate and format asset values for a given portfolio  */
 export const calcAssets = ({
@@ -58,10 +73,11 @@ export const calcAssets = ({
   currency = Constants.DefaultCurrency,
 }: CalculateAssetsParamsModel): AssetModel => {
   console.dir({ accounts, ids, quotes });
+  const a = calcAssetValue(accounts, quotes);
   return {
     totalBalance: 0,
     totalBalanceFormatted: formatCurrency(0, currency),
     balanceByCoin: [],
-    accounts,
+    accounts: a,
   };
 };

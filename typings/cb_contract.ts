@@ -89,8 +89,13 @@ export interface QuoteModelExtended extends QuoteModel {
 }
 
 export interface QuotesModel {
-  data: QuoteModelExtended | null;
-  error: Error | null;
+  quotes: QuoteModelExtended[]
+  errors: Record<string, Error>
+}
+
+export interface AccountQuoteModel extends AccountModelExtended {
+  quote?: QuoteModelExtended;
+  value?: number
 }
 
 export interface AssetModel {
@@ -103,5 +108,5 @@ export interface AssetModel {
     weight: number;
     weightFormatted: string;
   }[];
-  accounts: AccountModelExtended[];
+  accounts: AccountQuoteModel[];
 }
